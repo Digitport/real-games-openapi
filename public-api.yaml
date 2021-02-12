@@ -1,1 +1,88 @@
-
+swagger: '2.0'
+info:
+  title: public-api Real Games Public API
+  description: Public API for Real Games application.
+  contact:
+    name: Ilya Reznikov
+    email: ilya.reznikov@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+consumes:
+- application/json
+produces:
+- application/json
+x-google-backend:
+  address: https://real-games-304517.uc.r.appspot.com/
+  jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
+tags:
+- name: auth
+  description: Everything about authorization
+paths:
+  "/auth/phone":
+    get:
+      tags:
+      - auth
+      summary: Request SMS with PIN code
+      operationId: requestPhoneCode
+      parameters:
+      - name: data
+        required: true
+        in: body
+        description: Phone where code will be sent
+        schema:
+          required:
+          - phone
+          type: object
+          properties:
+            phone:
+              type: string
+              pattern: "\\+7\\d{10}"
+      responses:
+        '400':
+          description: Code wasn't sent
+          content: {}
+        '405':
+          description: Validation exception
+          content: {}
+  "/auth":
+    post:
+      tags:
+      - auth
+      summary: Get authentication token
+      operationId: getAuthToken
+      parameters:
+      - name: data
+        in: body
+        required: true
+        description: Any authentication data (SMS code, ID token from Google etc.)
+        schema:
+          required:
+          - type
+          - data
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - phone
+              - google
+            data:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Authentication failed
+          content: {}
+        '405':
+          description: Validation exception
+          content: {}
