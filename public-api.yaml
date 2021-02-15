@@ -38,7 +38,7 @@ paths:
           properties:
             phone:
               type: string
-              pattern: "\\+7\\d{10}"
+              pattern: "7\\d{10}"
       responses:
         '400':
           description: Code wasn't sent
