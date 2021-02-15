@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 0.0.1
 consumes:
 - application/json
 produces:
@@ -20,8 +20,8 @@ tags:
 - name: auth
   description: Everything about authorization
 paths:
-  "/auth/phone":
-    get:
+  /auth/phone:
+    post:
       tags:
       - auth
       summary: Request SMS with PIN code
@@ -42,11 +42,7 @@ paths:
       responses:
         '400':
           description: Code wasn't sent
-          content: {}
-        '405':
-          description: Validation exception
-          content: {}
-  "/auth":
+  /auth:
     post:
       tags:
       - auth
@@ -68,21 +64,17 @@ paths:
               enum:
               - phone
               - google
+            id:
+              type: string
             data:
               type: string
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
         '400':
           description: Authentication failed
-          content: {}
-        '405':
-          description: Validation exception
-          content: {}
