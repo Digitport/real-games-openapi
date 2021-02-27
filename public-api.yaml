@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.1
+  version: 0.0.2
 consumes:
 - application/json
 produces:
@@ -20,39 +20,19 @@ tags:
 - name: auth
   description: Everything about authorization
 paths:
-  /auth/phone:
-    post:
-      tags:
-      - auth
-      summary: Request SMS with PIN code
-      operationId: requestPhoneCode
-      parameters:
-      - name: data
-        required: true
-        in: body
-        description: Phone where code will be sent
-        schema:
-          required:
-          - phone
-          type: object
-          properties:
-            phone:
-              type: string
-              pattern: "7\\d{10}"
-      responses:
-        '400':
-          description: Code wasn't sent
   /auth:
     post:
       tags:
       - auth
       summary: Get authentication token
       operationId: getAuthToken
+      x-google-backend:
+        address: https://authenticator-dot-real-games-304517.uc.r.appspot.com/
+        jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
       parameters:
       - name: data
         in: body
         required: true
-        description: Any authentication data (SMS code, ID token from Google etc.)
         schema:
           required:
           - type
@@ -62,11 +42,12 @@ paths:
             type:
               type: string
               enum:
-              - phone
               - google
             id:
+              description: Some ID for authentication data, if needed
               type: string
             data:
+              description: Any authentication data (SMS code, ID token from Google etc.)
               type: string
       responses:
         '200':
@@ -74,6 +55,8 @@ paths:
           schema:
             type: object
             properties:
+              uid:
+                type: string
               token:
                 type: string
         '400':
