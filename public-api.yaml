@@ -14,7 +14,7 @@ consumes:
 produces:
 - application/json
 x-google-backend:
-  address: https://real-games-304517.uc.r.appspot.com/
+  address: https://real-games-304517.uc.r.appspot.com
   jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
 tags:
 - name: auth
@@ -27,8 +27,9 @@ paths:
       summary: Get authentication token
       operationId: getAuthToken
       x-google-backend:
-        address: https://authenticator-dot-real-games-304517.uc.r.appspot.com/
+        address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
         jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
+        path_translation: APPEND_PATH_TO_ADDRESS
       parameters:
       - name: data
         in: body
