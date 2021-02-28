@@ -62,3 +62,11 @@ paths:
                 type: string
         '400':
           description: Authentication failed
+securityDefinitions:
+  app_engine_token:
+    authorizationUrl: "127.0.0.1"
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "real-games-304517@appspot.gserviceaccount.com"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/real-games-304517@appspot.gserviceaccount.com"
+    x-google-audiences: "user,admin"
