@@ -19,3 +19,6 @@ gcloud api-gateway gateways update public-api-gateway \
     --location us-central1 \
     --api-config="$API_CONFIG" \
     --api=public-api
+
+echo
+gcloud api-gateway gateways describe public-api-gateway --location us-central1
