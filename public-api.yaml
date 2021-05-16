@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.2
+  version: 0.0.3
 consumes:
 - application/json
 produces:
@@ -16,6 +16,8 @@ produces:
 x-google-backend:
   address: https://real-games-304517.uc.r.appspot.com
   jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
+security:
+  - app_engine_token: []
 tags:
 - name: auth
   description: Everything about authorization
@@ -30,6 +32,7 @@ paths:
         address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
         jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
         path_translation: APPEND_PATH_TO_ADDRESS
+      security: []
       parameters:
       - name: data
         in: body
