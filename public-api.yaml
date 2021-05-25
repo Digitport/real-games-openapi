@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.3
+  version: 0.0.4
 consumes:
 - application/json
 produces:
@@ -65,6 +65,59 @@ paths:
                 type: string
         '400':
           description: Authentication failed
+  /user/{userId}/tags:
+    get:
+      summary: Get top tags for user
+      operationId: getUserTags
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: integer
+      - name: max-count
+        in: query
+        type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              tags:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Operation failed
+  /user/{userId}/newTasks:
+    get:
+      summary: Get top new tasks for user
+      operationId: getUserNewTasks
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: integer
+      - name: max-count
+        in: query
+        type: integer
+      - name: tag
+        in: query
+        type: array
+        items:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              tasks:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Operation failed
 securityDefinitions:
   app_engine_token:
     authorizationUrl: "127.0.0.1"
