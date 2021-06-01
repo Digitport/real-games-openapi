@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.4
+  version: 0.0.5
 consumes:
 - application/json
 produces:
@@ -83,10 +83,21 @@ paths:
           schema:
             type: object
             properties:
-              tags:
+              result:
                 type: array
                 items:
                   type: string
+              entities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entity:
+                      type: string
+                    id:
+                      type: string
+                    title:
+                      type: string
         '400':
           description: Operation failed
   /user/{userId}/newTasks:
