@@ -88,16 +88,20 @@ paths:
                 items:
                   type: string
               entities:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    entity:
-                      type: string
-                    id:
-                      type: string
-                    title:
-                      type: string
+                type: object
+                properties: 
+                  tag:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entity:
+                          type: string
+                          pattern: tag
+                        id:
+                          type: string
+                        title:
+                          type: string
         '400':
           description: Operation failed
   /user/{userId}/newTasks:
