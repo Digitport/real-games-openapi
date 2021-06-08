@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.5
+  version: 0.0.6
 consumes:
 - application/json
 produces:
@@ -104,33 +104,35 @@ paths:
                           type: string
         '400':
           description: Operation failed
-  /user/{userId}/newTasks:
+  /tasks:
     get:
-      summary: Get top new tasks for user
-      operationId: getUserNewTasks
-      parameters:
-      - name: userId
-        in: path
-        required: true
-        type: integer
-      - name: max-count
-        in: query
-        type: integer
-      - name: tag
-        in: query
-        type: array
-        items:
-          type: string
+      summary: Get tasks
+      operationId: getTasks
       responses:
         '200':
           description: successful operation
           schema:
             type: object
             properties:
-              tasks:
+              result:
                 type: array
                 items:
-                  type: object
+                  type: string
+              entities:
+                type: object
+                properties: 
+                  tag:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entity:
+                          type: string
+                          pattern: task
+                        id:
+                          type: string
+                        title:
+                          type: string
         '400':
           description: Operation failed
 securityDefinitions:
