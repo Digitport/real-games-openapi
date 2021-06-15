@@ -1,0 +1,145 @@
+swagger: '2.0'
+info:
+  title: public-api Real Games Public API
+  description: Public API for Real Games application.
+  contact:
+    name: Ilya Reznikov
+    email: ilya.reznikov@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.6
+consumes:
+- application/json
+produces:
+- application/json
+x-google-backend:
+  address: https://real-games-304517.uc.r.appspot.com
+  jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
+security:
+  - app_engine_token: []
+tags:
+- name: auth
+  description: Everything about authorization
+paths:
+  /auth:
+    post:
+      tags:
+      - auth
+      summary: Get authentication token
+      operationId: getAuthToken
+      x-google-backend:
+        address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
+        jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security: []
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          required:
+          - type
+          - data
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - google
+            id:
+              description: Some ID for authentication data, if needed
+              type: string
+            data:
+              description: Any authentication data (SMS code, ID token from Google etc.)
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              uid:
+                type: string
+              token:
+                type: string
+        '400':
+          description: Authentication failed
+  /user/{userId}/tags:
+    get:
+      summary: Get top tags for user
+      operationId: getUserTags
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: integer
+      - name: max-count
+        in: query
+        type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              result:
+                type: array
+                items:
+                  type: string
+              entities:
+                type: object
+                properties: 
+                  tag:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entity:
+                          type: string
+                          pattern: tag
+                        id:
+                          type: string
+                        title:
+                          type: string
+        '400':
+          description: Operation failed
+  /tasks:
+    get:
+      summary: Get tasks
+      operationId: getTasks
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              result:
+                type: array
+                items:
+                  type: string
+              entities:
+                type: object
+                properties: 
+                  tag:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entity:
+                          type: string
+                          pattern: task
+                        id:
+                          type: string
+                        title:
+                          type: string
+        '400':
+          description: Operation failed
+securityDefinitions:
+  app_engine_token:
+    authorizationUrl: "127.0.0.1"
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "real-games-304517@appspot.gserviceaccount.com"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/real-games-304517@appspot.gserviceaccount.com"
+    x-google-audiences: "user,admin"
