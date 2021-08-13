@@ -198,40 +198,38 @@ paths:
                         
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/featured/media:
-    patch:
-      summary: add new or edit media on user Task
-      operationId: AddMediaTask
-      consumes:
-         - multipart/form-data
-      parameters:
-      - name: userId
-        in: path
-        required: true
-        type: integer
-      - name: taskId
-        in: path
-        required: true
-        type: integer
-      - in: formData
-        name: media
-        type: file
-        description: The file to upload.
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              urls:
-                type: array
-                description:  array of url path
-                items:
-                  type: string
-              
-                        
-        '400':
-          description: Operation failed
+#  /user/{userId}/{taskId}/featured/media:
+#    patch:
+#      summary: add new or edit media on user Task
+#      operationId: AddMediaTask
+#      consumes:
+#         - multipart/form-data
+#      parameters:
+#      - name: userId
+#        in: path
+#        required: true
+#        type: integer
+#      - name: taskId
+#        in: path
+#        required: true
+#        type: integer
+#      - in: formData
+#        name: media
+#        type: file
+#        description: The file to upload.
+#      responses:
+#        '200':
+#          description: successful operation
+#          schema:
+#            type: object
+#            properties:
+#              urls:
+#                type: array
+#                description:  array of url path
+#                items:
+#                  type: string
+#        '400':
+#          description: Operation failed
   /user/{userId}/featured/tags:
     get:
       summary: Get user featured tags
@@ -606,14 +604,17 @@ paths:
         in: body
         required: true
         schema:
-          type: array
-          items: 
-            type: object
-            properties:
-              name:
-                type: string
-              phone:
-                type: string
+          type: object
+          properties:
+            tags:
+              type: array
+              items: 
+                type: object
+                properties:
+                  name:
+                    type: string
+                  phone:
+                    type: string
       responses:
         '200':
           description: successful operation
@@ -642,7 +643,7 @@ paths:
                           type: integer
         '400':
           description: Operation failed
-  
+
 securityDefinitions:
   app_engine_token:
     authorizationUrl: "http://127.0.0.1"
