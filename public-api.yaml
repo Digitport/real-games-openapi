@@ -606,7 +606,7 @@ paths:
         schema:
           type: object
           properties:
-            tags:
+            friend:
               type: array
               items: 
                 type: object
