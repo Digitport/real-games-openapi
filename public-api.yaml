@@ -16,8 +16,8 @@ produces:
 x-google-backend:
   address: https://real-games-304517.uc.r.appspot.com
   jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
-security:
-  - app_engine_token: []
+#security:
+#  - app_engine_token: []
 tags:
 - name: auth
   description: Everything about authorization
