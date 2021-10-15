@@ -146,6 +146,12 @@ paths:
                             type: string
         '400':
           description: Operation failed
+    put:
+      summary: ADD SUMMARY
+      operationId: userAddFeaturedTaskHandler
+      responses:
+        '200':
+          description: successful operation
   /user/{userId}/{taskId}/featured/task:
     put:
       summary: Add or Delete user featured task
