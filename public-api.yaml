@@ -9,6 +9,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.0.8
+host: public-api-gateway-91g1pwkh.uc.gateway.dev
 consumes:
   - application/json
 produces:
@@ -16,8 +17,8 @@ produces:
 x-google-backend:
   address: https://real-games-304517.uc.r.appspot.com
   jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
-# security:
-#   - app_engine_token: []
+security:
+  - app_engine_token: []
 tags:
   - name: auth
     description: Everything about authorization
