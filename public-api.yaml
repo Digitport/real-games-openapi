@@ -115,7 +115,7 @@ paths:
     get:
       tags:
         - main
-      summary: Get user signed task
+      summary: Получение заданий взятых пользователем
       operationId: userFeaturedTaskHandler
       parameters:
         - name: userId
@@ -135,19 +135,27 @@ paths:
               entities:
                 type: object
                 properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
                   userTask:
-                    $ref: "#definitions/UserTask"
+                    $ref: "#/definitions/UserTask"
                   user:
-                    $ref: "#definitions/UserData"
+                    $ref: "#/definitions/UserData"
                   userBundleFavorites:
-                    $ref: "#definitions/UserTaskBundle"
+                    $ref: "#/definitions/UserTaskBundle"
+                  taskBundle:
+                    $ref: "#/definitions/TaskBundle"
+                  task:
+                    $ref: "#/definitions/Task"
+                  tag:
+                    $ref: "#/definitions/Tags"
         '400':
           description: Operation failed
     put:
       tags:
         - main
-      summary: Add or Delete user featured task
-      operationId: userAddOrUpdateUserTask
+      summary: Add or update user featured task
+      operationId: добавления или изменение пользовательского задания 
       parameters:
         - name: userId
           in: path
@@ -180,17 +188,10 @@ paths:
               entities:
                 type: object
                 properties:
-                  userFavorites:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        referenceEntity:
-                          type: string
-                        referenceId:
-                          type: integer
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
+                  userTask:
+                    $ref: "#/definitions/UserTask"
 
         '400':
           description: Operation failed
@@ -413,7 +414,7 @@ paths:
                 type: string
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/addcheck:
+  /user/{userId}/{taskId}/recheck:
     put:
       tags:
         - main
@@ -436,6 +437,46 @@ paths:
             properties:
               status:
                 type: string
+        '400':
+          description: Operation failed
+  /user/{userId}/{taskId}/easy:
+    put:
+      tags:
+        - main
+      summary: the user said that the task is easy
+      operationId: taskReactionEasy
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
+        - name: taskId
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Operation failed
+  /user/{userId}/{taskId}/hard:
+    put:
+      tags:
+        - main
+      summary: the user said that the task is hard
+      operationId: taskReactionHard
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
+        - name: taskId
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
         '400':
           description: Operation failed
   /user/{userId}/{taskId}/complaint/task:
@@ -642,7 +683,7 @@ paths:
                 items:
                   type: string
         '400':
-          description: Operation failedd
+          description: Operation failed
   /tasks:
     get:
       tags:
@@ -658,7 +699,7 @@ paths:
         - name: author
           in: query
           type: integer
-        - name: only_new
+        - name: only_best
           in: query
           type: boolean
         - name: title
@@ -782,26 +823,10 @@ paths:
               entities:
                 type: object
                 properties:
-                  task:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                          pattern: task
-                        description:
-                          type: string
-                        score:
-                          type: number
-                        tagIds:
-                          type: array
-                          items:
-                            type: integer
-                        level:
-                          type: integer
-                        checkType:
-                          type: string
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
+                  taskBundle:
+                    $ref: "#/definitions/TaskBundle"
         '400':
           description: Operation failed
   /tags:
@@ -830,8 +855,10 @@ paths:
               entities:
                 type: object
                 properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
                   tag:
-                    $ref: "#definitions/Tags"
+                    $ref: "#/definitions/Tags"
         '400':
           description: Operation failed
   /tag:
@@ -867,8 +894,10 @@ paths:
               entities:
                 type: object
                 properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
                   tag:
-                    $ref: "#definitions/Tags"
+                    $ref: "#/definitions/Tags"
         '400':
           description: Operation failed
   /user/{userId}/info:
@@ -895,6 +924,8 @@ paths:
               entities:
                 type: object
                 properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
                   user:
                     $ref: "#definitions/UserData"
         '400':
@@ -1027,153 +1058,145 @@ paths:
           description: Operation failed
 definitions:
   UserTask:
-    type: array
-    items:
-      type: object
-      properties:
-        referenceTaskID:
-          type: integer
-        takenCount:
-          type: integer
-        completeCount:
-          type: integer
-        failedCount:
-          type: integer
-        bundleId:
-          type: integer
-        authorID:
-          type: integer
-        created:
-          type: string
-        status:
-          type: string
-        comment:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        rate:
-          type: string
-        media:
-          type: object
-          properties: 
-            entity:
-              type: string
-            url:
-              type: string
-            thumbnail:
-              type: string
-        tagsids:
-          type: array
-          items:
-            type: string       
-  UserData:
-    type: array
-    items:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            type: string
-        entities:
-          type: object
-          properties:
-            user:
-              type: array
-              items:
-                type: object
-                properties:
-                  phone:
-                    type: string
-                  google_id:
-                    type: string
-                  email:
-                    type: string
-                  name:
-                    type: string
-                  picture:
-                    type: string
-  Tags:
-    type: array
-    items:
-      type: object
-      properties:
-        name:
-          type: string
-          pattern: task
-        description:
-          type: string
-        category:
-          type: boolean
-        id:
-          type: integer
-  Task:
-    type: array
-    items:
-      type: object
-      properties:
-        Title:
-          type: string
-          pattern: task
-        score:
-          type: string
-        sample:
-          type: object
-          properties:
-            entity:
-              type: string
-            url:
-              type: string
-            thumbnail:
-              type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
+    type: object
+    properties:
+      userTaskID:
+        type: object
+        properties:
+          referenceTaskID:
             type: integer
-        level:
-          type: integer
-        authorID:
-          type: integer
-        checkType:
-          type: string
+          status:
+            type: string
+          media:
+            type: object
+            properties: 
+              entity:
+                type: string
+              url:
+                type: string
+              thumbnail:
+                type: string
+          reviewers:
+            type: array
+            properties:
+              UserID:
+                type: string
+              ReviewStatus:
+                type: string
+              ReviewComment:
+                type: string     
+  UserData:
+    type: object
+    properties:
+      userID:
+        type: object
+        properties:
+          phone:
+            type: string
+          google_id:
+            type: string
+          email:
+            type: string
+          name:
+            type: string
+          picture:
+            type: string
+  Tags:
+    type: object
+    properties:
+      tagID:
+        type: object
+        properties:
+          name:
+            type: string
+            pattern: task
+          description:
+            type: string
+          category:
+            type: boolean
+          id:
+            type: integer
+  Task:
+    type: object
+    properties:
+      taskID:
+        type: object
+        properties:
+          Title:
+            type: string
+            pattern: task
+          score:
+            type: string
+          sample:
+            type: object
+            properties:
+              entity:
+                type: string
+              url:
+                type: string
+              thumbnail:
+                type: string
+          description:
+            type: string
+          tags:
+            type: array
+            items:
+              type: integer
+          level:
+            type: integer
+          authorID:
+            type: integer
+          checkType:
+            type: string
 
   TaskBundle:
-    type: array
-    items:
-      type: object
-      properties:
-        Title:
-          type: string
-          pattern: task
-        ID:
-          type: integer
-        description:
-          type: string
-        taskIds:
-          type: array
-          items:
+    type: object
+    properties:
+      taskBundleID:
+        type: object
+        properties:
+          Title:
             type: string
-        authorID:
-          type: integer
-  
+            pattern: task
+          ID:
+            type: integer
+          description:
+            type: string
+          taskIds:
+            type: array
+            items:
+              type: string
+          authorID:
+            type: integer
+  SearchResult:
+    type: object
+    properties:
+      searchResultID:
+        type: object
+        properties:
+          entity:
+            type: string
+          id:
+            type: string
+          referenceEntity:
+            type: string
+          referenceEntityId:
+            type: string
   UserTaskBundle:
-    type: array
-    items:
-      type: object
-      properties:
-        userTaskBundleId:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        taskIds:
-          type: array
-          items:
+    type: object
+    properties:
+      userTaskBundleId:
+        type: object
+        properties:
+          userTaskBundleId:
             type: string
-        authorID:
-          type: integer
+          title:
+            type: string
+          description:
+            type: string
+          taskIds:
+            type: array
+            items:
+              type: string
+          authorID:
+            type: integer
