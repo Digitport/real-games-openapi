@@ -9,7 +9,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.0.8
-host: https://public-api-gateway-91g1pwkh.uc.gateway.dev
+host: public-api-gateway-91g1pwkh.uc.gateway.dev
 consumes:
   - application/json
 produces:
