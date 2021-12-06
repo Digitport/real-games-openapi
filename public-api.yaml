@@ -543,7 +543,7 @@ paths:
       tags:
         - main
       summary: cancel task verification
-      operationId: taskCheckAgain
+      operationId: taskCancelCheck
       parameters:
         - name: userId
           in: path
@@ -699,39 +699,39 @@ paths:
                     $ref: "#/definitions/UserTaskBundle"
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/media:
-    patch:
-      tags:
-        - main
-      summary: add media to task
-      operationId: addMediaTask
-      consumes:
-        - multipart/form-data
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskId
-          in: path
-          required: true
-          type: integer
-        - in: formData
-          name: media
-          type: file
-          description: The file to upload.
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              urls:
-                type: array
-                items:
-                  type: string
-        '400':
-          description: Operation failed
+#  /user/{userId}/{taskId}/media:
+#    patch:
+#      tags:
+#        - main
+#      summary: add media to task
+#      operationId: addMediaTask
+#      consumes:
+#        - multipart/form-data
+#      parameters:
+#        - name: userId
+#          in: path
+#          required: true
+#          type: integer
+#        - name: taskId
+#          in: path
+#          required: true
+#          type: integer
+#        - in: formData
+#          name: media
+#          type: file
+#          description: The file to upload.
+#      responses:
+#        '200':
+#          description: successful operation
+#          schema:
+#            type: object
+#            properties:
+#              urls:
+#                type: array
+#                items:
+#                  type: string
+#        '400':
+#          description: Operation failed
   /tasks:
     get:
       tags:
@@ -970,6 +970,10 @@ paths:
       summary: edit user info
       operationId: updateUserInfo
       parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
         - name: data
           in: body
           schema:
