@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.8
+  version: 0.0.9
 consumes:
   - application/json
 produces:
@@ -68,11 +68,12 @@ paths:
                 type: string
         '400':
           description: Authentication failed
+
   /user/{userId}/tags:
     get:
       tags:
         - main
-      summary: Get top tags for user
+      summary: получение топ категорий и тегов для пользователя
       operationId: getUserTags
       parameters:
         - name: userId
@@ -105,7 +106,7 @@ paths:
     get:
       tags:
         - main
-      summary: Getting tasks taken by the user
+      summary: получения списка заданий принятых пользователем
       operationId: userFeaturedTaskHandler
       parameters:
         - name: userId
@@ -144,7 +145,7 @@ paths:
     put:
       tags:
         - main
-      summary: Add or update user featured task
+      summary: добавление и изменение пользовательских заданий
       operationId: adding or changing a custom task 
       parameters:
         - name: userId
@@ -188,13 +189,21 @@ paths:
     delete:
       tags:
         - main
-      summary: delete user featured task
+      summary: удаление пользовательских заданий
       operationId: userDeleteUserTaskHandler 
       parameters:
         - name: userId
           in: path
           required: true
           type: integer
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              taskId:
+                type: string
       responses:
         '200':
           description: successful operation
@@ -209,7 +218,7 @@ paths:
     get:
       tags:
         - main
-      summary: getting information about taking tasks
+      summary: получение списка созданых заданий с информацией об их выполнении
       operationId: userExpretTaskHandler
       parameters:
         - name: userId
@@ -251,7 +260,7 @@ paths:
     get:
       tags:
         - main
-      summary: tasks for check
+      summary: получение списка заданий для проверки на правильность выполнения
       operationId: taskForCheck
       parameters:
         - name: userId
@@ -313,7 +322,7 @@ paths:
     get:
       tags:
         - main
-      summary: Get user featured tags
+      summary: получение топ категорий и тегов для пользователя
       operationId: userFeaturedTagsHandler
       parameters:
         - name: userId
@@ -343,7 +352,7 @@ paths:
     put:
       tags:
         - main
-      summary: Add or edit user featured tags
+      summary: добавление и изменение топ категорий  пользователя
       operationId: userAddOrDeleteFeaturedTagHandler
       parameters:
         - name: userId
@@ -388,7 +397,7 @@ paths:
     put:
       tags:
         - main
-      summary: confirm the user's task
+      summary: подтвердить правильное выполнение задания пользователем
       operationId: confirmcheck
       parameters:
         - name: userId
@@ -413,7 +422,7 @@ paths:
     put:
       tags:
         - main
-      summary: refuse the user's task
+      summary: отклонить выполнение задания пользователем
       operationId: refusecheck
       parameters:
         - name: userId
@@ -438,7 +447,7 @@ paths:
     put:
       tags:
         - main
-      summary: recheck task
+      summary: повторно отправить задание на проверку
       operationId: taskCheckAgain
       parameters:
         - name: userId
@@ -463,7 +472,7 @@ paths:
     put:
       tags:
         - main
-      summary: the user said that the task is easy
+      summary: пользователь посчитал что задание легкое
       operationId: taskReactionEasy
       parameters:
         - name: userId
@@ -483,7 +492,7 @@ paths:
     put:
       tags:
         - main
-      summary: the user said that the task is hard
+      summary: пользователь посчитал что задание сложное
       operationId: taskReactionHard
       parameters:
         - name: userId
@@ -503,7 +512,7 @@ paths:
     post:
       tags:
         - main
-      summary: sending a complaint about a task
+      summary: отправка жалобы на задание
       operationId: addComplaintTask
       parameters:
         - name: data
@@ -542,8 +551,8 @@ paths:
     put:
       tags:
         - main
-      summary: cancel task verification
-      operationId: taskCancelCheck
+      summary: отменить проверку задания
+      operationId: taskCheckAgain
       parameters:
         - name: userId
           in: path
@@ -567,7 +576,7 @@ paths:
     get:
       tags:
         - main
-      summary: get a reward for a task
+      summary: получить награду за выполненое задание
       operationId: taskGetReward
       parameters:
         - name: userId
@@ -606,7 +615,7 @@ paths:
     get:
       tags:
         - main
-      summary: get a list of task reviewers
+      summary: получение списка проверяющих это задание
       operationId: userTaskOnCheckHandler
       parameters:
         - name: userId
@@ -669,7 +678,7 @@ paths:
     put:
       tags:
         - main
-      summary: accept or change a composite task
+      summary: добавление и изменение пользовательских составных заданий
       operationId: userAddOrUpdateUserTaskBundleHandler
       parameters:
         - name: userId
@@ -699,44 +708,67 @@ paths:
                     $ref: "#/definitions/UserTaskBundle"
         '400':
           description: Operation failed
-#  /user/{userId}/{taskId}/media:
-#    patch:
-#      tags:
-#        - main
-#      summary: add media to task
-#      operationId: addMediaTask
-#      consumes:
-#        - multipart/form-data
-#      parameters:
-#        - name: userId
-#          in: path
-#          required: true
-#          type: integer
-#        - name: taskId
-#          in: path
-#          required: true
-#          type: integer
-#        - in: formData
-#          name: media
-#          type: file
-#          description: The file to upload.
-#      responses:
-#        '200':
-#          description: successful operation
-#          schema:
-#            type: object
-#            properties:
-#              urls:
-#                type: array
-#                items:
-#                  type: string
-#        '400':
-#          description: Operation failed
+  /user/{userId}/{taskId}/media:
+    patch:
+      tags:
+        - main
+      summary: добавление медиа на задание
+      operationId: addMediaTask
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
+        - name: taskId
+          in: path
+          required: true
+          type: integer
+        - in: formData
+          name: media
+          type: file
+          description: The file to upload.
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              urls:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Operation failed
+  /upload/tasks:
+    post:
+      tags:
+        - main
+      summary: add task from excell
+      operationId: addTasksFromExcell
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          description: The file to upload.
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        '400':
+          description: Operation failed
   /tasks:
     get:
       tags:
         - main
-      summary: Get tasks
+      summary: получение заданий
       operationId: getTasks
       parameters:
         - name: tags
@@ -782,7 +814,7 @@ paths:
     post:
       tags:
         - main
-      summary: Add task
+      summary: добавление нвого задания
       operationId: addTask
       parameters:
         - name: data
@@ -823,7 +855,7 @@ paths:
     put:
       tags:
         - main
-      summary: Add composite task
+      summary: добавление нового составного задания
       operationId: addTaskBundle
       parameters:
         - name: data
@@ -867,7 +899,7 @@ paths:
     get:
       tags:
         - main
-      summary: Get tags
+      summary: получение списка категорий и тегов
       operationId: getTags
       parameters:
         - name: name
@@ -899,7 +931,7 @@ paths:
     post:
       tags:
         - main
-      summary: update tag
+      summary: добавление и изменение тега
       operationId: updateTag
       parameters:
         - name: data
@@ -938,7 +970,7 @@ paths:
     get:
       tags:
         - main
-      summary: Get user info
+      summary: получение информации о пользователе
       operationId: userInfo
       parameters:
         - name: userId
@@ -967,13 +999,9 @@ paths:
     post:
       tags:
         - main
-      summary: edit user info
+      summary: обновление пользовательской информации
       operationId: updateUserInfo
       parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
         - name: data
           in: body
           schema:
@@ -1008,7 +1036,7 @@ paths:
     get:
       tags:
         - main
-      summary: Get user friend
+      summary: получение списка друзей
       operationId: userFriends
       parameters:
         - name: userId
@@ -1046,7 +1074,7 @@ paths:
     post:
       tags:
         - main
-      summary: Set user featured tags
+      summary: добавление новых друзей из списка контактов
       operationId: userAddFriends
       parameters:
         - name: userId
