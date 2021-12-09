@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.9
+  version: 0.0.10
 consumes:
   - application/json
 produces:
@@ -68,7 +68,49 @@ paths:
                 type: string
         '400':
           description: Authentication failed
-
+  /tag/{tagId}/statistic:
+    get:
+      tags:
+        - main
+      summary: получение статистики выполненых заданий в категории
+      operationId: getTagsStatistic
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              result:
+                type: array
+                items:
+                  type: string
+              entities:
+                type: object
+                properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
+                  user:
+                    $ref: "#/definitions/UserData"
+                  tagStatistic:
+                    type: object
+                    properties:
+                      tagStatisticID:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          user_id:
+                            type: string
+                          task_count:
+                            type: integer
+                    
+        '400':
+          description: Operation failed
   /user/{userId}/tags:
     get:
       tags:
@@ -552,7 +594,7 @@ paths:
       tags:
         - main
       summary: отменить проверку задания
-      operationId: taskCheckAgain
+      operationId: taskCancelAgain
       parameters:
         - name: userId
           in: path
@@ -674,7 +716,7 @@ paths:
                                 type: string
         '400':
           description: Operation failed
-  /user/{userId}/{taskBundleId}/featured/taskBundle:
+  /user/{userId}/{taskBundleId}/taskBundle:
     put:
       tags:
         - main
@@ -741,29 +783,29 @@ paths:
                   type: string
         '400':
           description: Operation failed
-  /upload/tasks:
-    post:
-      tags:
-        - main
-      summary: add task from excell
-      operationId: addTasksFromExcell
-      consumes:
-        - multipart/form-data
-      parameters:
-        - in: formData
-          name: file
-          type: file
-          description: The file to upload.
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
+  # /upload/tasks:
+  #   post:
+  #     tags:
+  #       - main
+  #     summary: add task from excell
+  #     operationId: addTasksFromExcell
+  #     consumes:
+  #       - multipart/form-data
+  #     parameters:
+  #       - in: formData
+  #         name: file
+  #         type: file
+  #         description: The file to upload.
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         schema:
+  #           type: object
+  #           properties:
+  #             status:
+  #               type: string
+  #       '400':
+  #         description: Operation failed
   /tasks:
     get:
       tags:
