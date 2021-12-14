@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.11
+  version: 0.0.12
 consumes:
   - application/json
 produces:
@@ -328,6 +328,38 @@ paths:
                     $ref: "#definitions/UserTask"
         '400':
           description: Operation failed
+  #  /user/{userId}/{taskId}/featured/media:
+  #    patch:
+  #      summary: add new or edit media on user Task
+  #      operationId: AddMediaTask
+  #      consumes:
+  #         - multipart/form-data
+  #      parameters:
+  #      - name: userId
+  #        in: path
+  #        required: true
+  #        type: integer
+  #      - name: taskId
+  #        in: path
+  #        required: true
+  #        type: integer
+  #      - in: formData
+  #        name: media
+  #        type: file
+  #        description: The file to upload.
+  #      responses:
+  #        '200':
+  #          description: successful operation
+  #          schema:
+  #            type: object
+  #            properties:
+  #              urls:
+  #                type: array
+  #                description:  array of url path
+  #                items:
+  #                  type: string
+  #        '400':
+  #          description: Operation failed
   /user/{userId}/featured/tags:
     get:
       tags:
@@ -724,8 +756,8 @@ paths:
         - main
       summary: добавление медиа на задание
       operationId: addMediaTask
-#      consumes:
-#        - multipart/form-data
+      consumes:
+        - multipart/form-data
       parameters:
         - name: userId
           in: path
@@ -735,10 +767,10 @@ paths:
           in: path
           required: true
           type: integer
-#        - in: formData
-#          name: media
-#          type: file
-#          description: The file to upload.
+        - in: formData
+          name: media
+          type: file
+          description: The file to upload.
       responses:
         '200':
           description: successful operation
@@ -1057,6 +1089,9 @@ paths:
           in: path
           required: true
           type: integer
+        - name: name
+          in: query
+          type: string
       responses:
         '200':
           description: successful operation
@@ -1070,19 +1105,12 @@ paths:
               entities:
                 type: object
                 properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
                   friend:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        phone:
-                          type: string
-                        have:
-                          type: boolean
-                        userID:
-                          type: integer
+                    $ref: "#/definitions/Friend"
+                  user:
+                    $ref: "#/definitions/UserData"
         '400':
           description: Operation failed
     post:
@@ -1099,17 +1127,22 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              friend:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    phone:
-                      type: string
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: array
+                  items:
+                    type: string
+                email:
+                  type: array
+                  items:
+                    type: string
+                contactId:
+                  type: string
       responses:
         '200':
           description: successful operation
@@ -1123,19 +1156,12 @@ paths:
               entities:
                 type: object
                 properties:
+                  searchResult:
+                    $ref: "#/definitions/SearchResult"
                   friend:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        phone:
-                          type: string
-                        have:
-                          type: boolean
-                        userID:
-                          type: integer
+                    $ref: "#/definitions/Friend"
+                  user:
+                    $ref: "#/definitions/UserData"
         '400':
           description: Operation failed
 definitions:
@@ -1281,4 +1307,24 @@ definitions:
             items:
               type: string
           authorID:
+            type: integer
+  Friend:
+    type: object
+    properties:
+      friendID:
+        type: object
+        properties:
+          name:
+            type: string
+          email:
+            type: array
+            items:
+              type: string
+          phone:
+            type: array
+            items:
+              type: string
+          contactId:
+            type: string
+          friendId:
             type: integer
