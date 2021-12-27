@@ -490,7 +490,7 @@ paths:
       tags:
         - main
       summary: отправить задание на проверку
-      operationId: taskCheckAgain
+      operationId: taskCheck
       parameters:
         - name: userId
           in: path
@@ -792,10 +792,10 @@ paths:
           in: path
           required: true
           type: integer
-        - in: formData
-          name: media
-          type: file
-          description: The file to upload.
+#        - in: formData
+#          name: media
+#          type: file
+#          description: The file to upload.
       responses:
         '200':
           description: successful operation
@@ -1148,26 +1148,26 @@ paths:
           in: path
           required: true
           type: integer
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                name:
-                  type: string
-                phone:
-                  type: array
-                  items:
-                    type: string
-                email:
-                  type: array
-                  items:
-                    type: string
-                contactId:
-                  type: string
+#        - name: data
+#          in: body
+#          required: true
+#          schema:
+#            type: array
+#            items:
+#              type: object
+#              properties:
+#                name:
+#                  type: string
+#                phone:
+#                  type: array
+#                  items:
+#                    type: string
+#                email:
+#                  type: array
+#                  items:
+#                    type: string
+#                contactId:
+#                  type: string
       responses:
         '200':
           description: successful operation
