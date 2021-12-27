@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.12
+  version: 0.0.13
 consumes:
   - application/json
 produces:
@@ -466,6 +466,31 @@ paths:
         - main
       summary: отклонить выполнение задания пользователем
       operationId: refusecheck
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
+        - name: taskId
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        '400':
+          description: Operation failed
+  /user/{userId}/{taskId}/check:
+    put:
+      tags:
+        - main
+      summary: отправить задание на проверку
+      operationId: taskCheckAgain
       parameters:
         - name: userId
           in: path
