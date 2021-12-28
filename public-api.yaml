@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.12
+  version: 0.0.13
 consumes:
   - application/json
 produces:
@@ -485,6 +485,31 @@ paths:
                 type: string
         '400':
           description: Operation failed
+  /user/{userId}/{userTaskId}/check:
+    put:
+      tags:
+        - main
+      summary: отправить задание на проверку
+      operationId: taskCheck
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
+        - name: userTaskId
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+        '400':
+          description: Operation failed
   /user/{userId}/{userTaskId}/recheck:
     put:
       tags:
@@ -767,10 +792,10 @@ paths:
           in: path
           required: true
           type: integer
-        - in: formData
-          name: media
-          type: file
-          description: The file to upload.
+#        - in: formData
+#          name: media
+#          type: file
+#          description: The file to upload.
       responses:
         '200':
           description: successful operation
@@ -1123,26 +1148,26 @@ paths:
           in: path
           required: true
           type: integer
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                name:
-                  type: string
-                phone:
-                  type: array
-                  items:
-                    type: string
-                email:
-                  type: array
-                  items:
-                    type: string
-                contactId:
-                  type: string
+#        - name: data
+#          in: body
+#          required: true
+#          schema:
+#            type: array
+#            items:
+#              type: object
+#              properties:
+#                name:
+#                  type: string
+#                phone:
+#                  type: array
+#                  items:
+#                    type: string
+#                email:
+#                  type: array
+#                  items:
+#                    type: string
+#                contactId:
+#                  type: string
       responses:
         '200':
           description: successful operation
