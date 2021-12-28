@@ -435,7 +435,7 @@ paths:
 
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/confirmcheck:
+  /user/{userId}/{taskCheckId}/confirmcheck:
     put:
       tags:
         - main
@@ -446,7 +446,7 @@ paths:
           in: path
           required: true
           type: integer
-        - name: taskId
+        - name: taskCheckId
           in: path
           required: true
           type: integer
@@ -460,7 +460,7 @@ paths:
                 type: string
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/refusecheck:
+  /user/{userId}/{taskCheckId}/refusecheck:
     put:
       tags:
         - main
@@ -471,7 +471,7 @@ paths:
           in: path
           required: true
           type: integer
-        - name: taskId
+        - name: taskCheckId
           in: path
           required: true
           type: integer
@@ -485,7 +485,7 @@ paths:
                 type: string
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/recheck:
+  /user/{userId}/{userTaskId}/recheck:
     put:
       tags:
         - main
@@ -496,7 +496,7 @@ paths:
           in: path
           required: true
           type: integer
-        - name: taskId
+        - name: userTaskId
           in: path
           required: true
           type: integer
@@ -589,7 +589,7 @@ paths:
                 type: integer
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/cancelcheck:
+  /user/{userId}/{userTaskId}/cancelcheck:
     put:
       tags:
         - main
@@ -600,7 +600,7 @@ paths:
           in: path
           required: true
           type: integer
-        - name: taskId
+        - name: userTaskId
           in: path
           required: true
           type: integer
@@ -614,7 +614,7 @@ paths:
                 type: string
         '400':
           description: Operation failed
-  /user/{userId}/{taskId}/reward:
+  /user/{userId}/{userTaskId}/reward:
     get:
       tags:
         - main
@@ -625,7 +625,7 @@ paths:
           in: path
           required: true
           type: integer
-        - name: taskId
+        - name: userTaskId
           in: path
           required: true
           type: integer
