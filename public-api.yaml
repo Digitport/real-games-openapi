@@ -1148,26 +1148,29 @@ paths:
           in: path
           required: true
           type: integer
-#        - name: data
-#          in: body
-#          required: true
-#          schema:
-#            type: array
-#            items:
-#              type: object
-#              properties:
-#                name:
-#                  type: string
-#                phone:
-#                  type: array
-#                  items:
-#                    type: string
-#                email:
-#                  type: array
-#                  items:
-#                    type: string
-#                contactId:
-#                  type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              contacts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    phone:
+                      type: array
+                      items:
+                        type: string
+                    email:
+                      type: array
+                      items:
+                        type: string
+                    contactId:
+                      type: string
       responses:
         '200':
           description: successful operation
