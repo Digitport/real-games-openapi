@@ -18,6 +18,7 @@ x-google-backend:
   jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
 security:
   - app_engine_token: []
+host: public-api-gateway-91g1pwkh.uc.gateway.dev
 tags:
   - name: auth
     description: Everything about authorization
