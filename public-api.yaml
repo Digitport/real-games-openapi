@@ -683,6 +683,10 @@ paths:
                   name: taskId
                   required: true
                   type: integer
+                - description: The file to upload.
+                  in: formData
+                  name: media
+                  type: file
             responses:
                 "200":
                     description: successful operation
