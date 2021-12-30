@@ -1,1369 +1,1305 @@
-swagger: '2.0'
-info:
-  title: public-api Real Games Public API
-  description: Public API for Real Games application.
-  contact:
-    name: Ilya Reznikov
-    email: ilya.reznikov@gmail.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.14
 consumes:
-  - application/json
-produces:
-  - application/json
-x-google-backend:
-  address: https://real-games-304517.uc.r.appspot.com
-  jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
-security:
-  - app_engine_token: []
-host: public-api-gateway-91g1pwkh.uc.gateway.dev
-tags:
-  - name: auth
-    description: Everything about authorization
-  - name: main
-    description: Main handlers
-
-paths:
-  /auth:
-    post:
-      tags:
-        - auth
-      summary: Get authentication token
-      operationId: getAuthToken
-      x-google-backend:
-        address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
-        jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
-        path_translation: APPEND_PATH_TO_ADDRESS
-      security: []
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            required:
-              - type
-              - data
-            type: object
-            properties:
-              type:
-                type: string
-                enum:
-                  - google
-              id:
-                description: Some ID for authentication data, if needed
-                type: string
-              data:
-                description: Any authentication data (SMS code, ID token from Google etc.)
-                type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              uid:
-                type: string
-              token:
-                type: string
-        '400':
-          description: Authentication failed
-  /tag/{tagId}/statistic:
-    get:
-      tags:
-        - main
-      summary: получение статистики выполненых заданий в категории
-      operationId: getTagsStatistic
-      parameters:
-        - name: tagId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
+    - application/json
+definitions:
+    Friend:
+        properties:
+            friendID:
                 properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  user:
-                    $ref: "#/definitions/UserData"
-                  tagStatistic:
-                    type: object
-                    properties:
-                      tagStatisticID:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          user_id:
-                            type: string
-                          task_count:
-                            type: integer
-                    
-        '400':
-          description: Operation failed
-  /user/{userId}/tags:
-    get:
-      tags:
-        - main
-      summary: получение топ категорий и тегов для пользователя
-      operationId: getUserTags
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: max-count
-          in: query
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  tag:
-                    $ref: "#/definitions/Tags"
-        '400':
-          description: Operation failed
-  /user/{userId}/task:
-    get:
-      tags:
-        - main
-      summary: получения списка заданий принятых пользователем
-      operationId: userFeaturedTaskHandler
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  userTask:
-                    $ref: "#/definitions/UserTask"
-                  user:
-                    $ref: "#/definitions/UserData"
-                  userBundleFavorites:
-                    $ref: "#/definitions/UserTaskBundle"
-                  taskBundle:
-                    $ref: "#/definitions/TaskBundle"
-                  task:
-                    $ref: "#/definitions/Task"
-                  tag:
-                    $ref: "#/definitions/Tags"
-        '400':
-          description: Operation failed
-    put:
-      tags:
-        - main
-      summary: добавление и изменение пользовательских заданий
-      operationId: adding or changing a custom task 
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              taskId:
-                type: string
-              comment:
-                type: string
-              rate:
-                type: string
-              status:
-                type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  userTask:
-                    $ref: "#/definitions/UserTask"
-
-        '400':
-          description: Operation failed
-    delete:
-      tags:
-        - main
-      summary: удаление пользовательских заданий
-      operationId: userDeleteUserTaskHandler 
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              taskId:
-                type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/expert:
-    get:
-      tags:
-        - main
-      summary: получение списка созданых заданий с информацией об их выполнении
-      operationId: userExpretTaskHandler
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  expertTask:
-                    type: object
-                    properties:
-                      expertTaskID:
-                        type: object
-                        properties:
-                          TaskID:
-                            type: string
-                          Title:
-                            type: string
-                          TakenCount:
-                            type: integer
-                          CompleteCount:
-                            type: integer
-        '400':
-          description: Operation failed
-  /user/{userId}/taskforcheck:
-    get:
-      tags:
-        - main
-      summary: получение списка заданий для проверки на правильность выполнения
-      operationId: taskForCheck
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-             type: object
-             properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  userTask:
-                    $ref: "#definitions/UserTask"
-        '400':
-          description: Operation failed
-  #  /user/{userId}/{taskId}/featured/media:
-  #    patch:
-  #      summary: add new or edit media on user Task
-  #      operationId: AddMediaTask
-  #      consumes:
-  #         - multipart/form-data
-  #      parameters:
-  #      - name: userId
-  #        in: path
-  #        required: true
-  #        type: integer
-  #      - name: taskId
-  #        in: path
-  #        required: true
-  #        type: integer
-  #      - in: formData
-  #        name: media
-  #        type: file
-  #        description: The file to upload.
-  #      responses:
-  #        '200':
-  #          description: successful operation
-  #          schema:
-  #            type: object
-  #            properties:
-  #              urls:
-  #                type: array
-  #                description:  array of url path
-  #                items:
-  #                  type: string
-  #        '400':
-  #          description: Operation failed
-  /user/{userId}/featured/tags:
-    get:
-      tags:
-        - main
-      summary: получение топ категорий и тегов для пользователя
-      operationId: userFeaturedTagsHandler
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  tag:
-                    $ref: "#definitions/Tags"
-        '400':
-          description: Operation failed
-  /user/{userId}/{tagId}/featured/tags:
-    put:
-      tags:
-        - main
-      summary: добавление и изменение топ категорий  пользователя
-      operationId: userAddOrDeleteFeaturedTagHandler
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: tagId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  tag:
-                    type: object
-                    properties:
-                      tagId:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          referenceEntity:
-                            type: string
-                          referenceId:
-                            type: integer
-
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskCheckId}/confirmcheck:
-    put:
-      tags:
-        - main
-      summary: подтвердить правильное выполнение задания пользователем
-      operationId: confirmcheck
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskCheckId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskCheckId}/refusecheck:
-    put:
-      tags:
-        - main
-      summary: отклонить выполнение задания пользователем
-      operationId: refusecheck
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskCheckId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/{userTaskId}/check:
-    put:
-      tags:
-        - main
-      summary: отправить задание на проверку
-      operationId: taskCheck
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: userTaskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/{userTaskId}/recheck:
-    put:
-      tags:
-        - main
-      summary: повторно отправить задание на проверку
-      operationId: taskCheckAgain
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: userTaskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskId}/easy:
-    put:
-      tags:
-        - main
-      summary: пользователь посчитал что задание легкое
-      operationId: taskReactionEasy
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskId}/hard:
-    put:
-      tags:
-        - main
-      summary: пользователь посчитал что задание сложное
-      operationId: taskReactionHard
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskId}/complaint/task:
-    post:
-      tags:
-        - main
-      summary: отправка жалобы на задание
-      operationId: addComplaintTask
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              text:
-                type: string
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              userID:
-                type: integer
-              taskID:
-                type: integer
-              text:
-                type: string
-              id:
-                type: integer
-        '400':
-          description: Operation failed
-  /user/{userId}/{userTaskId}/cancelcheck:
-    put:
-      tags:
-        - main
-      summary: отменить проверку задания
-      operationId: taskCancelAgain
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: userTaskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/{userTaskId}/reward:
-    get:
-      tags:
-        - main
-      summary: получить награду за выполненое задание
-      operationId: taskGetReward
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: userTaskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-              error_resp:
-                type: object
-                properties:
-                  error_code:
-                    type: integer
-                  error_msg:
-                    type: string
-              response:
-                type: object
-                properties:
-                  total:
-                    type: number
-                  credited:
-                    type: number
-        '400':
-          description: Operation failed
-  /user/{userId}/oncheck/task:
-    get:
-      tags:
-        - main
-      summary: получение списка проверяющих это задание
-      operationId: userTaskOnCheckHandler
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  userTaskOnReviews:
-                    type: object
-                    properties:
-                      userTaskOnReviewsID:
-                        type: object
-                        properties:
-                          referenceTaskID:
-                            type: integer
-                          status:
-                            type: string
-                          comment:
-                            type: string
-                          rate:
-                            type: string
-                          taskIds:
-                            type: array
-                            items:
-                              type: string
-                          reviewerAssessment:
-                            type: array
-                            items:
-                              type: string
-                          media:
-                            type: object
-                            properties: 
-                              entity:
-                                type: string
-                              url:
-                                type: string
-                              thumbnail:
-                                type: string
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskBundleId}/taskBundle:
-    put:
-      tags:
-        - main
-      summary: добавление и изменение пользовательских составных заданий
-      operationId: userAddOrUpdateUserTaskBundleHandler
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskBundleId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  UserTaskBundle:
-                    $ref: "#/definitions/UserTaskBundle"
-        '400':
-          description: Operation failed
-  /user/{userId}/{taskId}/media:
-    patch:
-      tags:
-        - main
-      summary: добавление медиа на задание
-      operationId: addMediaTask
-      consumes:
-        - multipart/form-data
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: taskId
-          in: path
-          required: true
-          type: integer
-#        - in: formData
-#          name: media
-#          type: file
-#          description: The file to upload.
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              urls:
-                type: array
-                items:
-                  type: string
-        '400':
-          description: Operation failed
-  # /upload/tasks:
-  #   post:
-  #     tags:
-  #       - main
-  #     summary: add task from excell
-  #     operationId: addTasksFromExcell
-  #     consumes:
-  #       - multipart/form-data
-  #     parameters:
-  #       - in: formData
-  #         name: file
-  #         type: file
-  #         description: The file to upload.
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         schema:
-  #           type: object
-  #           properties:
-  #             status:
-  #               type: string
-  #       '400':
-  #         description: Operation failed
-  /tasks:
-    get:
-      tags:
-        - main
-      summary: получение заданий
-      operationId: getTasks
-      parameters:
-        - name: tags
-          in: query
-          type: array
-          items:
-            type: string
-        - name: author
-          in: query
-          type: integer
-        - name: only_best
-          in: query
-          type: boolean
-        - name: title
-          in: query
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  task:
-                    $ref: "#definitions/Task"
-                  user:
-                    $ref: "#definitions/UserData"
-                  tag:
-                    $ref: "#definitions/Tag"
-                  taskBundle:
-                    $ref: "#definitions/TaskBundle"
-        '400':
-          description: Operation failed
-  /task:
-    post:
-      tags:
-        - main
-      summary: добавление нвого задания
-      operationId: addTask
-      parameters:
-        - name: data
-          in: body
-          schema:
-            type: object
-            properties:
-              title:
-                type: integer
-              description:
-                type: string
-              tags:
-                type: array
-                items:
-                  type: string
-              author:
-                type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  task:
-                    $ref: "#definitions/Task"
-        '400':
-          description: Operation failed
-  /taskBundle:
-    put:
-      tags:
-        - main
-      summary: добавление нового составного задания
-      operationId: addTaskBundle
-      parameters:
-        - name: data
-          in: body
-          schema:
-            type: object
-            properties:
-              title:
-                type: integer
-              description:
-                type: string
-              tasks:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  order:
-                    type: integer
-              author:
-                type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  taskBundle:
-                    $ref: "#/definitions/TaskBundle"
-        '400':
-          description: Operation failed
-  /tags:
-    get:
-      tags:
-        - main
-      summary: получение списка категорий и тегов
-      operationId: getTags
-      parameters:
-        - name: name
-          in: query
-          type: string
-        - name: category
-          in: query
-          type: boolean
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  tag:
-                    $ref: "#/definitions/Tags"
-        '400':
-          description: Operation failed
-  /tag:
-    post:
-      tags:
-        - main
-      summary: добавление и изменение тега
-      operationId: updateTag
-      parameters:
-        - name: data
-          in: body
-          schema:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-              description:
-                type: string
-              category:
-                type: boolean
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  tag:
-                    $ref: "#/definitions/Tags"
-        '400':
-          description: Operation failed
-  /user/{userId}/info:
-    get:
-      tags:
-        - main
-      summary: получение информации о пользователе
-      operationId: userInfo
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  user:
-                    $ref: "#/definitions/UserData"
-        '400':
-          description: Operation failed
-    post:
-      tags:
-        - main
-      summary: обновление пользовательской информации
-      operationId: updateUserInfo
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: data
-          in: body
-          schema:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-              description:
-                type: string
-              category:
-                type: boolean
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  user:
-                    $ref: "#/definitions/UserData"
-  /user/{userId}/friends:
-    get:
-      tags:
-        - main
-      summary: получение списка друзей
-      operationId: userFriends
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: name
-          in: query
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
-                type: object
-                properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  friend:
-                    $ref: "#/definitions/Friend"
-                  user:
-                    $ref: "#/definitions/UserData"
-        '400':
-          description: Operation failed
-    post:
-      tags:
-        - main
-      summary: добавление новых друзей из списка контактов
-      operationId: userAddFriends
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: integer
-        - name: data
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              contacts:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    phone:
-                      type: array
-                      items:
+                    contactId:
                         type: string
                     email:
-                      type: array
-                      items:
+                        items:
+                            type: string
+                        type: array
+                    friendId:
+                        type: integer
+                    name:
                         type: string
-                    contactId:
-                      type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: object
-            properties:
-              result:
-                type: array
-                items:
-                  type: string
-              entities:
+                    phone:
+                        items:
+                            type: string
+                        type: array
                 type: object
+        type: object
+    SearchResult:
+        properties:
+            searchResultID:
                 properties:
-                  searchResult:
-                    $ref: "#/definitions/SearchResult"
-                  friend:
-                    $ref: "#/definitions/Friend"
-                  user:
-                    $ref: "#/definitions/UserData"
-        '400':
-          description: Operation failed
-
+                    entity:
+                        type: string
+                    id:
+                        type: string
+                    referenceEntity:
+                        type: string
+                    referenceEntityId:
+                        type: string
+                type: object
+        type: object
+    Tags:
+        properties:
+            tagID:
+                properties:
+                    category:
+                        type: boolean
+                    description:
+                        type: string
+                    id:
+                        type: integer
+                    name:
+                        pattern: task
+                        type: string
+                type: object
+        type: object
+    Task:
+        properties:
+            taskID:
+                properties:
+                    Title:
+                        pattern: task
+                        type: string
+                    authorID:
+                        type: integer
+                    checkType:
+                        type: string
+                    description:
+                        type: string
+                    level:
+                        type: integer
+                    sample:
+                        properties:
+                            entity:
+                                type: string
+                            thumbnail:
+                                type: string
+                            url:
+                                type: string
+                        type: object
+                    score:
+                        type: string
+                    tags:
+                        items:
+                            type: integer
+                        type: array
+                type: object
+        type: object
+    TaskBundle:
+        properties:
+            taskBundleID:
+                properties:
+                    ID:
+                        type: integer
+                    Title:
+                        pattern: task
+                        type: string
+                    authorID:
+                        type: integer
+                    description:
+                        type: string
+                    taskIds:
+                        items:
+                            type: string
+                        type: array
+                type: object
+        type: object
+    UserData:
+        properties:
+            userID:
+                properties:
+                    email:
+                        type: string
+                    google_id:
+                        type: string
+                    name:
+                        type: string
+                    phone:
+                        type: string
+                    picture:
+                        type: string
+                type: object
+        type: object
+    UserTask:
+        properties:
+            userTaskID:
+                properties:
+                    media:
+                        properties:
+                            entity:
+                                type: string
+                            thumbnail:
+                                type: string
+                            url:
+                                type: string
+                        type: object
+                    referenceTaskID:
+                        type: integer
+                    reviewers:
+                        properties:
+                            ReviewComment:
+                                type: string
+                            ReviewStatus:
+                                type: string
+                            UserID:
+                                type: string
+                        type: array
+                    status:
+                        type: string
+                type: object
+        type: object
+    UserTaskBundle:
+        properties:
+            userTaskBundleId:
+                properties:
+                    authorID:
+                        type: integer
+                    description:
+                        type: string
+                    taskIds:
+                        items:
+                            type: string
+                        type: array
+                    title:
+                        type: string
+                    userTaskBundleId:
+                        type: string
+                type: object
+        type: object
+host: public-api-gateway-91g1pwkh.uc.gateway.dev
+info:
+    contact:
+        email: ilya.reznikov@gmail.com
+        name: Ilya Reznikov
+    description: Public API for Real Games application.
+    license:
+        name: Apache 2.0
+        url: http://www.apache.org/licenses/LICENSE-2.0.html
+    title: public-api Real Games Public API
+    version: 0.0.15
+paths:
+    /auth:
+        post:
+            operationId: getAuthToken
+            parameters:
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        data:
+                            description: Any authentication data (SMS code, ID token from Google etc.)
+                            type: string
+                        id:
+                            description: Some ID for authentication data, if needed
+                            type: string
+                        type:
+                            enum:
+                                - google
+                            type: string
+                    required:
+                        - type
+                        - data
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            token:
+                                type: string
+                            uid:
+                                type: string
+                        type: object
+                "400":
+                    description: Authentication failed
+            security: []
+            summary: Get authentication token
+            tags:
+                - auth
+            x-google-backend:
+                address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
+                jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
+                path_translation: APPEND_PATH_TO_ADDRESS
+    /tag:
+        post:
+            operationId: updateTag
+            parameters:
+                - in: body
+                  name: data
+                  schema:
+                    properties:
+                        category:
+                            type: boolean
+                        description:
+                            type: string
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#/definitions/Tags'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление и изменение тега
+            tags:
+                - main
+    /tag/{tagId}/statistic:
+        get:
+            operationId: getTagsStatistic
+            parameters:
+                - in: path
+                  name: tagId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tagStatistic:
+                                        properties:
+                                            tagStatisticID:
+                                                properties:
+                                                    id:
+                                                        type: string
+                                                    task_count:
+                                                        type: integer
+                                                    user_id:
+                                                        type: string
+                                                type: object
+                                        type: object
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение статистики выполненых заданий в категории
+            tags:
+                - main
+    /tags:
+        get:
+            operationId: getTags
+            parameters:
+                - in: query
+                  name: name
+                  type: string
+                - in: query
+                  name: category
+                  type: boolean
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#/definitions/Tags'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка категорий и тегов
+            tags:
+                - main
+    /task:
+        post:
+            operationId: addTask
+            parameters:
+                - in: body
+                  name: data
+                  schema:
+                    properties:
+                        author:
+                            type: integer
+                        description:
+                            type: string
+                        tags:
+                            items:
+                                type: string
+                            type: array
+                        title:
+                            type: integer
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    task:
+                                        $ref: '#definitions/Task'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление нвого задания
+            tags:
+                - main
+    /taskBundle:
+        put:
+            operationId: addTaskBundle
+            parameters:
+                - in: body
+                  name: data
+                  schema:
+                    properties:
+                        author:
+                            type: integer
+                        description:
+                            type: string
+                        tasks:
+                            properties:
+                                id:
+                                    type: string
+                                order:
+                                    type: integer
+                            type: object
+                        title:
+                            type: integer
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    taskBundle:
+                                        $ref: '#/definitions/TaskBundle'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление нового составного задания
+            tags:
+                - main
+    /tasks:
+        get:
+            operationId: getTasks
+            parameters:
+                - in: query
+                  items:
+                    type: string
+                  name: tags
+                  type: array
+                - in: query
+                  name: author
+                  type: integer
+                - in: query
+                  name: only_best
+                  type: boolean
+                - in: query
+                  name: title
+                  type: string
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#definitions/Tag'
+                                    task:
+                                        $ref: '#definitions/Task'
+                                    taskBundle:
+                                        $ref: '#definitions/TaskBundle'
+                                    user:
+                                        $ref: '#definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение заданий
+            tags:
+                - main
+    /user/{userId}/{tagId}/featured/tags:
+        put:
+            operationId: userAddOrDeleteFeaturedTagHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: tagId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        properties:
+                                            tagId:
+                                                properties:
+                                                    id:
+                                                        type: string
+                                                    referenceEntity:
+                                                        type: string
+                                                    referenceId:
+                                                        type: integer
+                                                type: object
+                                        type: object
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление и изменение топ категорий  пользователя
+            tags:
+                - main
+    /user/{userId}/{taskBundleId}/taskBundle:
+        put:
+            operationId: userAddOrUpdateUserTaskBundleHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskBundleId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    UserTaskBundle:
+                                        $ref: '#/definitions/UserTaskBundle'
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление и изменение пользовательских составных заданий
+            tags:
+                - main
+    /user/{userId}/{taskCheckId}/confirmcheck:
+        put:
+            operationId: confirmcheck
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskCheckId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: подтвердить правильное выполнение задания пользователем
+            tags:
+                - main
+    /user/{userId}/{taskCheckId}/refusecheck:
+        put:
+            operationId: refusecheck
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskCheckId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отклонить выполнение задания пользователем
+            tags:
+                - main
+    /user/{userId}/{taskId}/complaint/task:
+        post:
+            operationId: addComplaintTask
+            parameters:
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        text:
+                            type: string
+                    type: object
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            id:
+                                type: integer
+                            taskID:
+                                type: integer
+                            text:
+                                type: string
+                            userID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отправка жалобы на задание
+            tags:
+                - main
+    /user/{userId}/{taskId}/easy:
+        put:
+            operationId: taskReactionEasy
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                "400":
+                    description: Operation failed
+            summary: пользователь посчитал что задание легкое
+            tags:
+                - main
+    /user/{userId}/{taskId}/hard:
+        put:
+            operationId: taskReactionHard
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                "400":
+                    description: Operation failed
+            summary: пользователь посчитал что задание сложное
+            tags:
+                - main
+    /user/{userId}/{taskId}/media:
+        patch:
+            consumes:
+                - multipart/form-data
+            operationId: addMediaTask
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            urls:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление медиа на задание
+            tags:
+                - main
+    /user/{userId}/{userTaskId}/cancelcheck:
+        put:
+            operationId: taskCancelAgain
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: userTaskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отменить проверку задания
+            tags:
+                - main
+    /user/{userId}/{userTaskId}/check:
+        put:
+            operationId: taskCheck
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: userTaskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отправить задание на проверку
+            tags:
+                - main
+    /user/{userId}/{userTaskId}/recheck:
+        put:
+            operationId: taskCheckAgain
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: userTaskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: повторно отправить задание на проверку
+            tags:
+                - main
+    /user/{userId}/{userTaskId}/reward:
+        get:
+            operationId: taskGetReward
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: userTaskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            error_resp:
+                                properties:
+                                    error_code:
+                                        type: integer
+                                    error_msg:
+                                        type: string
+                                type: object
+                            response:
+                                properties:
+                                    credited:
+                                        type: number
+                                    total:
+                                        type: number
+                                type: object
+                            success:
+                                type: boolean
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получить награду за выполненое задание
+            tags:
+                - main
+    /user/{userId}/expert:
+        get:
+            operationId: userExpretTaskHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    expertTask:
+                                        properties:
+                                            expertTaskID:
+                                                properties:
+                                                    CompleteCount:
+                                                        type: integer
+                                                    TakenCount:
+                                                        type: integer
+                                                    TaskID:
+                                                        type: string
+                                                    Title:
+                                                        type: string
+                                                type: object
+                                        type: object
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка созданых заданий с информацией об их выполнении
+            tags:
+                - main
+    /user/{userId}/featured/tags:
+        get:
+            operationId: userFeaturedTagsHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#definitions/Tags'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение топ категорий и тегов для пользователя
+            tags:
+                - main
+    /user/{userId}/friends:
+        get:
+            operationId: userFriends
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: query
+                  name: name
+                  type: string
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    friend:
+                                        $ref: '#/definitions/Friend'
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка друзей
+            tags:
+                - main
+        post:
+            operationId: userAddFriends
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        contacts:
+                            items:
+                                properties:
+                                    contactId:
+                                        type: string
+                                    email:
+                                        items:
+                                            type: string
+                                        type: array
+                                    name:
+                                        type: string
+                                    phone:
+                                        items:
+                                            type: string
+                                        type: array
+                                type: object
+                            type: array
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    friend:
+                                        $ref: '#/definitions/Friend'
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление новых друзей из списка контактов
+            tags:
+                - main
+    /user/{userId}/info:
+        get:
+            operationId: userInfo
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение информации о пользователе
+            tags:
+                - main
+        post:
+            operationId: updateUserInfo
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: body
+                  name: data
+                  schema:
+                    properties:
+                        category:
+                            type: boolean
+                        description:
+                            type: string
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+            summary: обновление пользовательской информации
+            tags:
+                - main
+    /user/{userId}/oncheck/task:
+        get:
+            operationId: userTaskOnCheckHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    userTaskOnReviews:
+                                        properties:
+                                            userTaskOnReviewsID:
+                                                properties:
+                                                    comment:
+                                                        type: string
+                                                    media:
+                                                        properties:
+                                                            entity:
+                                                                type: string
+                                                            thumbnail:
+                                                                type: string
+                                                            url:
+                                                                type: string
+                                                        type: object
+                                                    rate:
+                                                        type: string
+                                                    referenceTaskID:
+                                                        type: integer
+                                                    reviewerAssessment:
+                                                        items:
+                                                            type: string
+                                                        type: array
+                                                    status:
+                                                        type: string
+                                                    taskIds:
+                                                        items:
+                                                            type: string
+                                                        type: array
+                                                type: object
+                                        type: object
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка проверяющих это задание
+            tags:
+                - main
+    /user/{userId}/tags:
+        get:
+            operationId: getUserTags
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: query
+                  name: max-count
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#/definitions/Tags'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение топ категорий и тегов для пользователя
+            tags:
+                - main
+    /user/{userId}/task:
+        delete:
+            operationId: userDeleteUserTaskHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        taskId:
+                            type: string
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: удаление пользовательских заданий
+            tags:
+                - main
+        get:
+            operationId: userFeaturedTaskHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#/definitions/Tags'
+                                    task:
+                                        $ref: '#/definitions/Task'
+                                    taskBundle:
+                                        $ref: '#/definitions/TaskBundle'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                    userBundleFavorites:
+                                        $ref: '#/definitions/UserTaskBundle'
+                                    userTask:
+                                        $ref: '#/definitions/UserTask'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получения списка заданий принятых пользователем
+            tags:
+                - main
+        put:
+            operationId: adding or changing a custom task
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        comment:
+                            type: string
+                        rate:
+                            type: string
+                        status:
+                            type: string
+                        taskId:
+                            type: string
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    userTask:
+                                        $ref: '#/definitions/UserTask'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление и изменение пользовательских заданий
+            tags:
+                - main
+    /user/{userId}/taskforcheck:
+        get:
+            operationId: taskForCheck
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    userTask:
+                                        $ref: '#definitions/UserTask'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка заданий для проверки на правильность выполнения
+            tags:
+                - main
+produces:
+    - application/json
+security:
+    - app_engine_token: []
 securityDefinitions:
-  app_engine_token:
-    authorizationUrl: "http://127.0.0.1"
-    flow: "implicit"
-    type: "oauth2"
-    x-google-issuer: "real-games-304517@appspot.gserviceaccount.com"
-    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/real-games-304517@appspot.gserviceaccount.com"
-    x-google-audiences: "user,admin"
-
-definitions:
-  UserTask:
-    type: object
-    properties:
-      userTaskID:
-        type: object
-        properties:
-          referenceTaskID:
-            type: integer
-          status:
-            type: string
-          media:
-            type: object
-            properties: 
-              entity:
-                type: string
-              url:
-                type: string
-              thumbnail:
-                type: string
-          reviewers:
-            type: array
-            properties:
-              UserID:
-                type: string
-              ReviewStatus:
-                type: string
-              ReviewComment:
-                type: string     
-  UserData:
-    type: object
-    properties:
-      userID:
-        type: object
-        properties:
-          phone:
-            type: string
-          google_id:
-            type: string
-          email:
-            type: string
-          name:
-            type: string
-          picture:
-            type: string
-  Tags:
-    type: object
-    properties:
-      tagID:
-        type: object
-        properties:
-          name:
-            type: string
-            pattern: task
-          description:
-            type: string
-          category:
-            type: boolean
-          id:
-            type: integer
-  Task:
-    type: object
-    properties:
-      taskID:
-        type: object
-        properties:
-          Title:
-            type: string
-            pattern: task
-          score:
-            type: string
-          sample:
-            type: object
-            properties:
-              entity:
-                type: string
-              url:
-                type: string
-              thumbnail:
-                type: string
-          description:
-            type: string
-          tags:
-            type: array
-            items:
-              type: integer
-          level:
-            type: integer
-          authorID:
-            type: integer
-          checkType:
-            type: string
-
-  TaskBundle:
-    type: object
-    properties:
-      taskBundleID:
-        type: object
-        properties:
-          Title:
-            type: string
-            pattern: task
-          ID:
-            type: integer
-          description:
-            type: string
-          taskIds:
-            type: array
-            items:
-              type: string
-          authorID:
-            type: integer
-  SearchResult:
-    type: object
-    properties:
-      searchResultID:
-        type: object
-        properties:
-          entity:
-            type: string
-          id:
-            type: string
-          referenceEntity:
-            type: string
-          referenceEntityId:
-            type: string
-  UserTaskBundle:
-    type: object
-    properties:
-      userTaskBundleId:
-        type: object
-        properties:
-          userTaskBundleId:
-            type: string
-          title:
-            type: string
-          description:
-            type: string
-          taskIds:
-            type: array
-            items:
-              type: string
-          authorID:
-            type: integer
-  Friend:
-    type: object
-    properties:
-      friendID:
-        type: object
-        properties:
-          name:
-            type: string
-          email:
-            type: array
-            items:
-              type: string
-          phone:
-            type: array
-            items:
-              type: string
-          contactId:
-            type: string
-          friendId:
-            type: integer
+    app_engine_token:
+        authorizationUrl: http://127.0.0.1
+        flow: implicit
+        type: oauth2
+        x-google-audiences: user,admin
+        x-google-issuer: real-games-304517@appspot.gserviceaccount.com
+        x-google-jwks_uri: https://www.googleapis.com/service_accounts/v1/metadata/x509/real-games-304517@appspot.gserviceaccount.com
+swagger: "2.0"
+tags:
+    - description: Everything about authorization
+      name: auth
+    - description: Main handlers
+      name: main
+    - description: Internal handlers
+      name: private
+x-google-backend:
+    address: https://real-games-304517.uc.r.appspot.com
+    jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
