@@ -1044,7 +1044,7 @@ paths:
                   required: true
                   schema:
                     properties:
-                        user_task_id:
+                        userTaskId:
                             type: string
                     type: object
             responses:
