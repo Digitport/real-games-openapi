@@ -598,6 +598,8 @@ paths:
                 - main
     /user/{userId}/{taskId}/media:
         patch:
+            consumes:
+                - multipart/form-data
             operationId: addMediaTask
             parameters:
                 - in: path
@@ -608,6 +610,10 @@ paths:
                   name: taskId
                   required: true
                   type: integer
+                - description: The file to upload.
+                  in: formData
+                  name: media
+                  type: file
             responses:
                 "200":
                     description: successful operation
