@@ -432,6 +432,45 @@ paths:
             summary: отклонить выполнение задания пользователем
             tags:
                 - main
+    /user/{userId}/{taskCheckId}/taskforcheck/reward:
+        get:
+            operationId: taskGetRewardTaskForCheck
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskCheckId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            error_resp:
+                                properties:
+                                    error_code:
+                                        type: integer
+                                    error_msg:
+                                        type: string
+                                type: object
+                            response:
+                                properties:
+                                    credited:
+                                        type: number
+                                    total:
+                                        type: number
+                                type: object
+                            success:
+                                type: boolean
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получить награду за првоерку задания
+            tags:
+                - main
     /user/{userId}/{taskId}/complaint/task:
         post:
             operationId: addComplaintTask
@@ -575,6 +614,14 @@ paths:
                   name: userTaskId
                   required: true
                   type: integer
+                - in: body
+                  name: data
+                  required: false
+                  schema:
+                    properties:
+                        amountForCheck:
+                            type: number
+                    type: object
             responses:
                 "200":
                     description: successful operation
