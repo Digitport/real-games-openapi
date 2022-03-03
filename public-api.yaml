@@ -143,6 +143,8 @@ definitions:
                         type: array
                     status:
                         type: string
+                    verificationCost:
+                        type: number
                 type: object
         type: object
     UserTaskBundle:
@@ -173,7 +175,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.18
+    version: 0.0.19
 paths:
     /auth:
         post:
