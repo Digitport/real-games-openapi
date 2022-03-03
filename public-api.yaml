@@ -682,7 +682,7 @@ paths:
                         type: object
                 "400":
                     description: Operation failed
-            summary: отказаться от дальнеейшей проверки
+            summary: отправить задание в неподтвержденные
             tags:
                 - main
     /user/{userId}/{userTaskId}/reward:
