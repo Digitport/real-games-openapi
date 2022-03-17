@@ -726,6 +726,45 @@ paths:
             summary: получить награду за выполненое задание
             tags:
                 - main
+    /user/{userId}/bundle/{userTaskBundleId}/reward:
+        get:
+            operationId: taskGetBundleReward
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: userTaskBundleId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            error_resp:
+                                properties:
+                                    error_code:
+                                        type: integer
+                                    error_msg:
+                                        type: string
+                                type: object
+                            response:
+                                properties:
+                                    credited:
+                                        type: number
+                                    total:
+                                        type: number
+                                type: object
+                            success:
+                                type: boolean
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получить награду за выполненое составное задание
+            tags:
+                - main
     /user/{userId}/expert:
         get:
             operationId: userExpretTaskHandler
