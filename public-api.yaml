@@ -473,6 +473,45 @@ paths:
             summary: получить награду за првоерку задания
             tags:
                 - main
+    /user/{userId}/{taskId}/complaint/bundletask:
+        post:
+            operationId: addComplaintBundleTask
+            parameters:
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        text:
+                            type: string
+                    type: object
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            id:
+                                type: integer
+                            taskID:
+                                type: integer
+                            text:
+                                type: string
+                            userID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отправка жалобы на задание
+            tags:
+                - main
     /user/{userId}/{taskId}/complaint/task:
         post:
             operationId: addComplaintTask
