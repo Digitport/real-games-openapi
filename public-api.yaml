@@ -723,7 +723,7 @@ paths:
                         type: object
                 "400":
                     description: Operation failed
-            summary: отправить задание в неподтвержденные
+            summary: вернуть задание из неподтвержденного статуса
             tags:
                 - main
     /user/{userId}/{userTaskId}/refusalcheck:
