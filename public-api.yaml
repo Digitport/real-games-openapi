@@ -829,6 +829,32 @@ paths:
             summary: получить награду за выполненое составное задание
             tags:
                 - main
+    /user/{userId}/checkphone:
+        get:
+            operationId: checkphone
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: query
+                  name: code
+                  type: string
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            ConfirmPhone:
+                                type: boolean
+                            SendCall:
+                                type: boolean
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отправить подтверждение подтвердить номер
+            tags:
+                - main
     /user/{userId}/expert:
         get:
             operationId: userExpretTaskHandler
