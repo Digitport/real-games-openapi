@@ -592,6 +592,37 @@ paths:
             tags:
                 - main
     /user/{userId}/{taskId}/media:
+        delete:
+            operationId: deelteuserMedia
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskId
+                  required: true
+                  type: integer
+                - in: body
+                  name: data
+                  schema:
+                    properties:
+                        mediaID:
+                            type: integer
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: удалить пользовательское задание
+            tags:
+                - main
         patch:
             operationId: addMediaTask
             parameters:
