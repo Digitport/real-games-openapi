@@ -105,6 +105,8 @@ definitions:
         properties:
             userID:
                 properties:
+                    balance:
+                        type: number
                     email:
                         type: string
                     google_id:
