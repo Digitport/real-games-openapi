@@ -622,7 +622,7 @@ paths:
                         type: object
                 "400":
                     description: Operation failed
-            summary: удалить пользовательское задание
+            summary: удалить пользовательское медиа у задания
             tags:
                 - main
         patch:
