@@ -1117,13 +1117,13 @@ paths:
                   name: data
                   schema:
                     properties:
-                        category:
-                            type: boolean
                         description:
                             type: string
-                        id:
-                            type: integer
-                        name:
+                        display_name:
+                            type: string
+                        email:
+                            type: string
+                        phone:
                             type: string
                     type: object
             responses:
