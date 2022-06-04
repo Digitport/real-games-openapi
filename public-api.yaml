@@ -309,8 +309,8 @@ paths:
                   name: author
                   type: integer
                 - in: query
-                  name: only_best
-                  type: boolean
+                  name: ranking_type
+                  type: integer
                 - in: query
                   name: title
                   type: string
