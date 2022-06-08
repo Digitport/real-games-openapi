@@ -342,33 +342,6 @@ paths:
             summary: получение заданий
             tags:
                 - main
-    /user/{userId:[0-9]+}/statistic:
-        get:
-            operationId: getUserStatistic
-            parameters:
-                - in: path
-                  name: userId
-                  required: true
-                  type: integer
-            responses:
-                "200":
-                    description: successful operation
-                    schema:
-                        properties:
-                            CompletedTaskCount:
-                                type: integer
-                            TakenTaskCount:
-                                type: integer
-                            UnconfirmedTaskCount:
-                                type: integer
-                            UserID:
-                                type: integer
-                        type: object
-                "400":
-                    description: Operation failed
-            summary: пользовательская статистика заданий
-            tags:
-                - main
     /user/{userId}/{tagId}/featured/tags:
         put:
             operationId: userAddOrDeleteFeaturedTagHandler
@@ -1207,6 +1180,33 @@ paths:
                 "400":
                     description: Operation failed
             summary: получение списка проверяющих это задание
+            tags:
+                - main
+    /user/{userId}/statistic:
+        get:
+            operationId: getUserStatistic
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            CompletedTaskCount:
+                                type: integer
+                            TakenTaskCount:
+                                type: integer
+                            UnconfirmedTaskCount:
+                                type: integer
+                            UserID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: пользовательская статистика заданий
             tags:
                 - main
     /user/{userId}/task:
