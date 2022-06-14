@@ -863,6 +863,31 @@ paths:
             tags:
                 - main
     /user/{userId}/checkphone:
+        delete:
+            operationId: checkphone
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: query
+                  name: code
+                  type: string
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            ConfirmPhone:
+                                type: boolean
+                            SendCall:
+                                type: boolean
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отмена подтверждения номера
+            tags:
+                - main
         get:
             operationId: checkphone
             parameters:
