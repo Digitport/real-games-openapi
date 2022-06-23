@@ -864,7 +864,7 @@ paths:
                 - main
     /user/{userId}/checkphone:
         delete:
-            operationId: checkphone
+            operationId: checkphoneDelete
             parameters:
                 - in: path
                   name: userId
@@ -889,7 +889,7 @@ paths:
             tags:
                 - main
         get:
-            operationId: checkphone
+            operationId: checkphoneGet
             parameters:
                 - in: path
                   name: userId
