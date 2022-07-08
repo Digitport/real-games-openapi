@@ -264,6 +264,36 @@ paths:
             summary: получение статистики выполненых заданий в категории
             tags:
                 - main
+    /tag/{tagId}/topauthor:
+        get:
+            operationId: tagtopauthor
+            parameters:
+                - in: path
+                  name: tagId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение популярных авторов по тегу
+            tags:
+                - main
     /tags:
         get:
             operationId: getTags
