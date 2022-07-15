@@ -918,16 +918,23 @@ paths:
             summary: отмена подтверждения номера
             tags:
                 - main
-        get:
+        post:
             operationId: checkphoneGet
             parameters:
                 - in: path
                   name: userId
                   required: true
                   type: integer
-                - in: query
-                  name: code
-                  type: string
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        Code:
+                            type: string
+                        Phone:
+                            type: string
+                    type: object
             responses:
                 "200":
                     description: successful operation
