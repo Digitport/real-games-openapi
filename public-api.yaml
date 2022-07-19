@@ -1001,7 +1001,7 @@ paths:
                 - main
     /user/{userId}/expertstat:
         get:
-            operationId: userExpretTaskHandler
+            operationId: getUserExpretTaskHandler
             parameters:
                 - in: path
                   name: userId
