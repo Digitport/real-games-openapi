@@ -1,6 +1,13 @@
 consumes:
     - application/json
 definitions:
+    ExpertStatistic:
+        properties:
+            Count:
+                type: integer
+            ItemID:
+                type: integer
+        type: object
     Friend:
         properties:
             friendID:
@@ -177,7 +184,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.22
+    version: 0.0.23
 paths:
     /auth:
         post:
@@ -985,6 +992,37 @@ paths:
                             result:
                                 items:
                                     type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка созданых заданий с информацией об их выполнении
+            tags:
+                - main
+    /user/{userId}/expertstat:
+        get:
+            operationId: userExpretTaskHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            Categories:
+                                items:
+                                    $ref: '#/definitions/ExpertStatistic'
+                                type: array
+                            Task:
+                                items:
+                                    $ref: '#/definitions/ExpertStatistic'
+                                type: array
+                            TaskBundle:
+                                items:
+                                    $ref: '#/definitions/ExpertStatistic'
                                 type: array
                         type: object
                 "400":
