@@ -184,7 +184,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.23
+    version: 0.0.24
 paths:
     /auth:
         post:
@@ -1147,6 +1147,66 @@ paths:
                 "400":
                     description: Operation failed
             summary: добавление новых друзей из списка контактов
+            tags:
+                - main
+    /user/{userId}/friends/{friendId}:
+        delete:
+            operationId: userAddFriends
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: friendId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: добавление новых друзей из списка контактов
+            tags:
+                - main
+        post:
+            operationId: userFriends
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: friendId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    friend:
+                                        $ref: '#/definitions/Friend'
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка друзей
             tags:
                 - main
     /user/{userId}/info:
