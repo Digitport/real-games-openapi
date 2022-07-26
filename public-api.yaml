@@ -1062,7 +1062,7 @@ paths:
                 - main
     /user/{userId}/friends:
         get:
-            operationId: userFriends
+            operationId: getUserFriends
             parameters:
                 - in: path
                   name: userId
@@ -1096,7 +1096,7 @@ paths:
             tags:
                 - main
         post:
-            operationId: userAddFriends
+            operationId: postUserAddFriends
             parameters:
                 - in: path
                   name: userId
@@ -1151,7 +1151,7 @@ paths:
                 - main
     /user/{userId}/friends/{friendId}:
         delete:
-            operationId: userAddFriends
+            operationId: deleteUserAddFriends
             parameters:
                 - in: path
                   name: userId
@@ -1175,7 +1175,7 @@ paths:
             tags:
                 - main
         post:
-            operationId: userFriends
+            operationId: postUserFriends
             parameters:
                 - in: path
                   name: userId
