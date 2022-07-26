@@ -184,7 +184,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.24
+    version: 0.0.25
 paths:
     /auth:
         post:
@@ -1367,6 +1367,36 @@ paths:
                 "400":
                     description: Operation failed
             summary: пользовательская статистика заданий
+            tags:
+                - main
+    /user/{userId}/tagstat:
+        get:
+            operationId: useкTagstatHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#definitions/Tags'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение статтистики  тегов для пользователя
             tags:
                 - main
     /user/{userId}/task:
