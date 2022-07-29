@@ -8,6 +8,13 @@ definitions:
             ItemID:
                 type: integer
         type: object
+    ExpertTagStatistic:
+        properties:
+            tag_id:
+                type: integer
+            task_count:
+                type: integer
+        type: object
     Friend:
         properties:
             friendID:
@@ -1028,6 +1035,33 @@ paths:
                 "400":
                     description: Operation failed
             summary: получение списка созданых заданий с информацией об их выполнении
+            tags:
+                - main
+    /user/{userId}/experttag:
+        get:
+            operationId: experttag
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            Categories:
+                                items:
+                                    $ref: '#/definitions/ExpertTagStatistic'
+                                type: array
+                            Tags:
+                                items:
+                                    $ref: '#/definitions/Tags'
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка тегов с колличеством заданий
             tags:
                 - main
     /user/{userId}/featured/tags:
