@@ -191,7 +191,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.26
+    version: 0.0.27
 paths:
     /auth:
         post:
@@ -346,7 +346,7 @@ paths:
             parameters:
                 - in: query
                   items:
-                    type: string
+                    type: integer
                   name: tags
                   type: array
                 - in: query
