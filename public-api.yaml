@@ -191,7 +191,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.27
+    version: 0.0.28
 paths:
     /auth:
         post:
@@ -236,6 +236,60 @@ paths:
                 address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
                 jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
                 path_translation: APPEND_PATH_TO_ADDRESS
+    /script/deleteBundleTask:
+        get:
+            operationId: deleteBundleTask
+            parameters:
+                - in: query
+                  items:
+                    type: integer
+                  name: tasks_id
+                  required: true
+                  type: array
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            skipped_id:
+                                items:
+                                    type: integer
+                                type: array
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: полное удаление составного задания из базы
+            tags:
+                - main
+    /script/deleteTask:
+        get:
+            operationId: deleteTask
+            parameters:
+                - in: query
+                  items:
+                    type: integer
+                  name: tasks_id
+                  required: true
+                  type: array
+                - in: query
+                  name: delete_bundle
+                  required: true
+                  type: boolean
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            skipped_id:
+                                items:
+                                    type: integer
+                                type: array
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: полное удаление задания из базы
+            tags:
+                - main
     /tag/{tagId}/statistic:
         get:
             operationId: getTagsStatistic
