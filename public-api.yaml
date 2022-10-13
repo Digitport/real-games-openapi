@@ -482,7 +482,7 @@ paths:
                 - main
     /user/{userId}:
         delete:
-            operationId: userInfo
+            operationId: deleteUserInfo
             parameters:
                 - in: path
                   name: userId
