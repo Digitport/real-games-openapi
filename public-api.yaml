@@ -202,7 +202,7 @@ paths:
                   required: true
                   type: string
                 - in: path
-                  name: taskId
+                  name: taskID
                   required: true
                   type: integer
             responses:
