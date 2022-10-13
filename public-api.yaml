@@ -195,7 +195,7 @@ info:
 paths:
     /{taskType}/{taskID}:
         get:
-            operationId: getTasks
+            operationId: getTasksByType
             parameters:
                 - in: path
                   name: taskType
