@@ -191,7 +191,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.29
+    version: 0.0.30
 paths:
     /{taskType}/{taskID}:
         get:
@@ -231,6 +231,46 @@ paths:
                 "400":
                     description: Operation failed
             summary: получение задания
+            tags:
+                - main
+    /{taskType}/{userId}/{taskID}:
+        get:
+            operationId: getUserTasksByType
+            parameters:
+                - in: path
+                  name: taskType
+                  required: true
+                  type: string
+                - in: path
+                  name: taskID
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#definitions/Tag'
+                                    task:
+                                        $ref: '#definitions/Task'
+                                    taskBundle:
+                                        $ref: '#definitions/TaskBundle'
+                                    user:
+                                        $ref: '#definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение задания пользовательского задания
             tags:
                 - main
     /auth:
