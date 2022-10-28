@@ -242,6 +242,10 @@ paths:
                   required: true
                   type: string
                 - in: path
+                  name: userID
+                  required: true
+                  type: integer
+                - in: path
                   name: taskID
                   required: true
                   type: integer
