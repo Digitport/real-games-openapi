@@ -191,7 +191,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.30
+    version: 0.0.31
 paths:
     /{taskType}/{taskID}:
         get:
@@ -1544,6 +1544,37 @@ paths:
             summary: получение списка проверяющих это задание
             tags:
                 - main
+    /user/{userId}/pushtoken:
+        post:
+            operationId: AddPushToken
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        platform:
+                            type: string
+                        token:
+                            type: string
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            TaskID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: добавление пользовательского токена
+            tags:
+                - public
     /user/{userId}/statistic:
         get:
             operationId: getUserStatistic
