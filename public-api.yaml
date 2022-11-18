@@ -191,7 +191,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.33
+    version: 0.0.34
 paths:
     /{taskType}/{taskID}:
         get:
@@ -687,6 +687,31 @@ paths:
             summary: получить награду за првоерку задания
             tags:
                 - main
+    /user/{userId}/{taskForCheckId}/taskforcheck:
+        delete:
+            operationId: taskforcheckdelete
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: taskForCheckId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: удалить задание для првоерки
+            tags:
+                - main
     /user/{userId}/{taskId}/complaint/bundletask:
         post:
             operationId: addComplaintBundleTask
@@ -889,7 +914,7 @@ paths:
                         type: object
                 "400":
                     description: Operation failed
-            summary: повторно отправить задание на проверку
+            summary: заблокировать задание
             tags:
                 - main
     /user/{userId}/{userTaskId}/cancelcheck:
