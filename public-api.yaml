@@ -890,7 +890,7 @@ paths:
                 - main
     /user/{userId}/{taskType}/{taskId}/block:
         delete:
-            operationId: taskCheckAgain
+            operationId: blockTask
             parameters:
                 - in: path
                   name: userId
