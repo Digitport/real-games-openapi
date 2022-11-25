@@ -193,45 +193,6 @@ info:
     title: public-api Real Games Public API
     version: 0.0.36
 paths:
-    //user/{userId}/{userIdForBlock}/complaint:
-        post:
-            operationId: addComplaintUser
-            parameters:
-                - in: body
-                  name: data
-                  required: true
-                  schema:
-                    properties:
-                        text:
-                            type: string
-                    type: object
-                - in: path
-                  name: userId
-                  required: true
-                  type: integer
-                - in: path
-                  name: userIdForBlock
-                  required: true
-                  type: integer
-            responses:
-                "200":
-                    description: successful operation
-                    schema:
-                        properties:
-                            id:
-                                type: integer
-                            taskID:
-                                type: integer
-                            text:
-                                type: string
-                            userID:
-                                type: integer
-                        type: object
-                "400":
-                    description: Operation failed
-            summary: отправка жалобы на пользователя
-            tags:
-                - main
     /{taskType}/{taskID}:
         get:
             operationId: getTasksByType
@@ -954,6 +915,45 @@ paths:
                 "400":
                     description: Operation failed
             summary: заблокировать задание
+            tags:
+                - main
+    /user/{userId}/{userIdForBlock}/complaint:
+        post:
+            operationId: addComplaintUser
+            parameters:
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        text:
+                            type: string
+                    type: object
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: path
+                  name: userIdForBlock
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            id:
+                                type: integer
+                            taskID:
+                                type: integer
+                            text:
+                                type: string
+                            userID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: отправка жалобы на пользователя
             tags:
                 - main
     /user/{userId}/{userTaskId}/cancelcheck:
