@@ -191,7 +191,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.36
+    version: 0.0.37
 paths:
     /{taskType}/{taskID}:
         get:
@@ -1597,6 +1597,27 @@ paths:
                                 type: array
                         type: object
             summary: обновление пользовательской информации
+            tags:
+                - main
+    /user/{userId}/logout:
+        post:
+            operationId: AddPushToken
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            TaskID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: удаление пользовательского токена
             tags:
                 - main
     /user/{userId}/oncheck/task:
