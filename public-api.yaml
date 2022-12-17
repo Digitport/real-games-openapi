@@ -115,6 +115,24 @@ definitions:
                         type: array
                 type: object
         type: object
+    TaskPeriod:
+        properties:
+            TaskPeriods:
+                items:
+                    properties:
+                        DayOFWeek:
+                            type: integer
+                        TaskID:
+                            type: integer
+                        TaskType:
+                            type: string
+                        Time:
+                            type: integer
+                        UserID:
+                            type: integer
+                    type: object
+                type: array
+        type: object
     UserData:
         properties:
             userID:
@@ -149,13 +167,15 @@ definitions:
                     referenceTaskID:
                         type: integer
                     reviewers:
-                        properties:
-                            ReviewComment:
-                                type: string
-                            ReviewStatus:
-                                type: string
-                            UserID:
-                                type: string
+                        items:
+                            properties:
+                                ReviewComment:
+                                    type: string
+                                ReviewStatus:
+                                    type: string
+                                UserID:
+                                    type: string
+                            type: object
                         type: array
                     status:
                         type: string
@@ -191,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.37
+    version: 0.0.38
 paths:
     /{taskType}/{taskID}:
         get:
@@ -215,13 +235,13 @@ paths:
                                     searchResult:
                                         $ref: '#/definitions/SearchResult'
                                     tag:
-                                        $ref: '#definitions/Tag'
+                                        $ref: '#/definitions/Tags'
                                     task:
-                                        $ref: '#definitions/Task'
+                                        $ref: '#/definitions/Task'
                                     taskBundle:
-                                        $ref: '#definitions/TaskBundle'
+                                        $ref: '#/definitions/TaskBundle'
                                     user:
-                                        $ref: '#definitions/UserData'
+                                        $ref: '#/definitions/UserData'
                                 type: object
                             result:
                                 items:
@@ -259,13 +279,13 @@ paths:
                                     searchResult:
                                         $ref: '#/definitions/SearchResult'
                                     tag:
-                                        $ref: '#definitions/Tag'
+                                        $ref: '#/definitions/Tags'
                                     task:
-                                        $ref: '#definitions/Task'
+                                        $ref: '#/definitions/Task'
                                     taskBundle:
-                                        $ref: '#definitions/TaskBundle'
+                                        $ref: '#/definitions/TaskBundle'
                                     user:
-                                        $ref: '#definitions/UserData'
+                                        $ref: '#/definitions/UserData'
                                 type: object
                             result:
                                 items:
@@ -506,13 +526,13 @@ paths:
                                     searchResult:
                                         $ref: '#/definitions/SearchResult'
                                     tag:
-                                        $ref: '#definitions/Tag'
+                                        $ref: '#/definitions/Tags'
                                     task:
-                                        $ref: '#definitions/Task'
+                                        $ref: '#/definitions/Task'
                                     taskBundle:
-                                        $ref: '#definitions/TaskBundle'
+                                        $ref: '#/definitions/TaskBundle'
                                     user:
-                                        $ref: '#definitions/UserData'
+                                        $ref: '#/definitions/UserData'
                                 type: object
                             result:
                                 items:
@@ -1368,7 +1388,7 @@ paths:
                                     searchResult:
                                         $ref: '#/definitions/SearchResult'
                                     tag:
-                                        $ref: '#definitions/Tags'
+                                        $ref: '#/definitions/Tags'
                                 type: object
                             result:
                                 items:
@@ -1601,7 +1621,7 @@ paths:
                 - main
     /user/{userId}/logout:
         post:
-            operationId: AddPushToken
+            operationId: logout
             parameters:
                 - in: path
                   name: userId
@@ -1626,10 +1646,6 @@ paths:
             parameters:
                 - in: path
                   name: userId
-                  required: true
-                  type: integer
-                - in: path
-                  name: taskId
                   required: true
                   type: integer
             responses:
@@ -1749,7 +1765,7 @@ paths:
                                     searchResult:
                                         $ref: '#/definitions/SearchResult'
                                     tag:
-                                        $ref: '#definitions/Tags'
+                                        $ref: '#/definitions/Tags'
                                 type: object
                             result:
                                 items:
@@ -1956,7 +1972,7 @@ paths:
                                     searchResult:
                                         $ref: '#/definitions/SearchResult'
                                     userTask:
-                                        $ref: '#definitions/UserTask'
+                                        $ref: '#/definitions/UserTask'
                                 type: object
                             result:
                                 items:
