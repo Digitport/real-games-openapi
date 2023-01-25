@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.40
+    version: 0.0.42
 paths:
     /{taskType}/{taskID}:
         get:
@@ -340,6 +340,81 @@ paths:
                 address: https://authenticator-dot-real-games-304517.uc.r.appspot.com
                 jwt_audience: 708424606241-h5mna5po3vnsu6jdblit477buv0637fk.apps.googleusercontent.com
                 path_translation: APPEND_PATH_TO_ADDRESS
+    /comment:
+        post:
+            operationId: addcomments
+            parameters:
+                - in: body
+                  name: data
+                  required: true
+                  schema:
+                    properties:
+                        day_of_week:
+                            type: integer
+                        time:
+                            type: integer
+                    type: object
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            comment:
+                                type: string
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: создание коментариев по сущности
+            tags:
+                - main
+    /comment/{entity}:
+        get:
+            operationId: getcomments
+            parameters:
+                - in: path
+                  name: entity
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            comment:
+                                type: string
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: получение коментариев по сущности
+            tags:
+                - main
+    /save:
+        post:
+            consumes:
+                - multipart/form-data
+            operationId: saveFile
+            parameters:
+                - description: The file to upload.
+                  in: formData
+                  name: media
+                  type: file
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        items:
+                            properties:
+                                Entity:
+                                    type: string
+                                Url:
+                                    type: string
+                            type: object
+                        type: array
+                "400":
+                    description: Authentication failed
+            summary: сохранение файла с локального скрипта
+            tags:
+                - main
     /script/deleteBundleTask:
         get:
             operationId: deleteBundleTask
@@ -1215,6 +1290,46 @@ paths:
                 "400":
                     description: Operation failed
             summary: получить награду за выполненое задание
+            tags:
+                - main
+    /user/{userId}/archived:
+        get:
+            operationId: userArchivedTaskHandler
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#/definitions/Tags'
+                                    task:
+                                        $ref: '#/definitions/Task'
+                                    taskBundle:
+                                        $ref: '#/definitions/TaskBundle'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                    userBundleFavorites:
+                                        $ref: '#/definitions/UserTaskBundle'
+                                    userTask:
+                                        $ref: '#/definitions/UserTask'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получения списка архивных заданий пользователя
             tags:
                 - main
     /user/{userId}/block/{userIdForBlock}:
