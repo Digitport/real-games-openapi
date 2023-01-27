@@ -367,7 +367,7 @@ paths:
             summary: создание коментариев по сущности
             tags:
                 - main
-    /comment/{entity}/{entityID}:
+    /comment/{entity}:
         get:
             operationId: getcomments
             parameters:
