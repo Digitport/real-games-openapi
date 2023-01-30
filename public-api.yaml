@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.43
+    version: 0.0.44
 paths:
     /{taskType}/{taskID}:
         get:
@@ -367,7 +367,7 @@ paths:
             summary: создание коментариев по сущности
             tags:
                 - main
-    /comment/{entity}:
+    /comment/{entity}/{userID}:
         get:
             operationId: getcomments
             parameters:
@@ -375,6 +375,10 @@ paths:
                   name: entity
                   required: true
                   type: string
+                - in: path
+                  name: entityID
+                  required: true
+                  type: integer
             responses:
                 "200":
                     description: successful operation
