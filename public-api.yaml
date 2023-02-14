@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.45
+    version: 0.0.46
 paths:
     /{taskType}/{taskID}:
         get:
@@ -621,6 +621,23 @@ paths:
                 "400":
                     description: Operation failed
             summary: получение заданий
+            tags:
+                - main
+    /time:
+        get:
+            operationId: getServerTime
+            parameters: null
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            time:
+                                type: string
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение времени сервера
             tags:
                 - main
     /upload/tasks:
