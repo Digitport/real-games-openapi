@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.46
+    version: 0.0.47
 paths:
     /{taskType}/{taskID}:
         get:
@@ -1950,6 +1950,46 @@ paths:
                 "400":
                     description: Authentication failed
             summary: создание заданий в локальном скрипте
+            tags:
+                - main
+    /user/{userId}/purchase:
+        get:
+            operationId: userPurchase
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    tag:
+                                        $ref: '#/definitions/Tags'
+                                    task:
+                                        $ref: '#/definitions/Task'
+                                    taskBundle:
+                                        $ref: '#/definitions/TaskBundle'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                    userBundleFavorites:
+                                        $ref: '#/definitions/UserTaskBundle'
+                                    userTask:
+                                        $ref: '#/definitions/UserTask'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получения списка купленных  пользователем
             tags:
                 - main
     /user/{userId}/pushtoken:
