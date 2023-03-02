@@ -1992,6 +1992,26 @@ paths:
             summary: получения списка купленных  пользователем
             tags:
                 - main
+        post:
+            operationId: purchase
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            TaskID:
+                                type: integer
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: покупка задания
+            tags:
+                - main
     /user/{userId}/pushtoken:
         post:
             operationId: AddPushToken
