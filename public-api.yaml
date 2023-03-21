@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.48
+    version: 0.0.49
 paths:
     /{taskType}/{taskID}:
         get:
@@ -390,6 +390,30 @@ paths:
                 "400":
                     description: Authentication failed
             summary: получение коментариев по сущности
+            tags:
+                - main
+    /product:
+        get:
+            operationId: getProducts
+            parameters: null
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение продуктов
             tags:
                 - main
     /save:
