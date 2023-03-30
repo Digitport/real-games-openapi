@@ -395,7 +395,7 @@ paths:
     /product:
         get:
             operationId: getProducts
-            parameters: null
+            parameters: []
             responses:
                 "200":
                     description: successful operation
