@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.51
+    version: 0.0.52
 paths:
     /{taskType}/{taskID}:
         get:
@@ -609,6 +609,23 @@ paths:
                   name: taskID
                   required: true
                   type: integer
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            status:
+                                type: string
+                        type: object
+                "400":
+                    description: Authentication failed
+            summary: получение ответа от ai
+            tags:
+                - main
+    /task/airespond:
+        delete:
+            operationId: airesponddelete
+            parameters: null
             responses:
                 "200":
                     description: successful operation
