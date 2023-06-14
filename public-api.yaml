@@ -625,7 +625,7 @@ paths:
     /task/airespond:
         delete:
             operationId: airesponddelete
-            parameters: null
+            parameters: []
             responses:
                 "200":
                     description: successful operation
