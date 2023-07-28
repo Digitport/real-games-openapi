@@ -211,7 +211,7 @@ info:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
     title: public-api Real Games Public API
-    version: 0.0.52
+    version: 0.0.53
 paths:
     /{taskType}/{taskID}:
         get:
@@ -1989,6 +1989,47 @@ paths:
                 "400":
                     description: Operation failed
             summary: получение списка проверяющих это задание
+            tags:
+                - main
+    /user/{userId}/people:
+        get:
+            operationId: getUserFriends
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  type: integer
+                - in: query
+                  name: name
+                  type: string
+                - in: query
+                  name: limit
+                  type: number
+                - in: query
+                  name: page
+                  type: number
+            responses:
+                "200":
+                    description: successful operation
+                    schema:
+                        properties:
+                            entities:
+                                properties:
+                                    friend:
+                                        $ref: '#/definitions/Friend'
+                                    searchResult:
+                                        $ref: '#/definitions/SearchResult'
+                                    user:
+                                        $ref: '#/definitions/UserData'
+                                type: object
+                            result:
+                                items:
+                                    type: string
+                                type: array
+                        type: object
+                "400":
+                    description: Operation failed
+            summary: получение списка друзей
             tags:
                 - main
     /user/{userId}/period:
