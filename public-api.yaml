@@ -429,7 +429,7 @@ paths:
                     description: Operation failed
             summary: получение инфо о стране по ip
             tags:
-                - main
+                - public
     /product:
         get:
             operationId: getProducts
